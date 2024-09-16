@@ -1,4 +1,4 @@
 # TheSTUDs
 CS 370
 
-figma
+Create a study website for people to track their studying
