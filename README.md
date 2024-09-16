@@ -1,0 +1,2 @@
+# TheSTUDs
+CS 370
