@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timer Page</title>
+</head>
+<body>
+    <h1 class="counter"></h1>
+    <script>
+        $(document).ready(function(){
+            setInterval(function(){
+                $.ajax({
+                    type:'GET',
+                    url:"{%url 'study_time' %}",
+                    success: function(response){
+                        var temp = response.study_time
+                        $('.counter').empty()
+                        $('.counter').append(temp)
+                    },
+                    error: function(response){
+                        alert("error")
+                    }
+                })
+            },1000)
+        })
+    </script>
+<p>TESTS</p>
+
+</body>
+</html>
