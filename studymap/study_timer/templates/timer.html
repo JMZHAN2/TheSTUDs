@@ -1,29 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Timer Page</title>
+    <meta charset="UTF-8">
+    <title>Study Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        #timer {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        
+        #timespent {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8b00fd;
+        }
+        
+    </style>
 </head>
 <body>
-    <h1 class="counter"></h1>
+    <h1>Study Timer</h1>
+    <div id="timer">
+        <h2>Time Spent:</h2>
+        <div id="timespent">
+            {{ timespent.hours|stringformat:"02d" }} : {{ timespent.minutes|stringformat:"02d" }} : {{ timespent.seconds|stringformat:"02d" }}
+        </div>
+    </div>
+ 
     <script>
-        $(document).ready(function(){
-            setInterval(function(){
-                $.ajax({
-                    type:'GET',
-                    url:"{%url 'study_time' %}",
-                    success: function(response){
-                        var temp = response.study_time
-                        $('.counter').empty()
-                        $('.counter').append(temp)
-                    },
-                    error: function(response){
-                        alert("error")
-                    }
-                })
-            },1000)
-        })
+        // Function to update the countdown timer
+        function updateTimer() {
+            var hours = parseInt(document.getElementById('timespent').textContent.split(':')[0]);
+            var minutes = parseInt(document.getElementById('timespent').textContent.split(':')[1]);
+            var seconds = parseInt(document.getElementById('timespent').textContent.split(':')[2]);
+ 
+            if (seconds < 60) {
+                seconds++;
+            } else {
+                if (minutes < 60) {
+                    minutes++;
+                    seconds = 0;
+                } else {
+                    hours++;
+                    minutes = 0;
+                    seconds = 0;
+                }
+            }
+ 
+            // Update the timer display
+            document.getElementById('timespent').textContent =
+                (hours < 10 ? '0' : '') + hours + ' : ' +
+                (minutes < 10 ? '0' : '') + minutes + ' : ' +
+                (seconds < 10 ? '0' : '') + seconds;
+        }
+ 
+        
+ 
+        // Update the timer every second
+        setInterval(updateTimer, 1000);
     </script>
-<p>TESTS</p>
-
 </body>
 </html>
