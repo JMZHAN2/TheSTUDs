@@ -22,8 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.home, name='home'),
     path("timer/", include("study_timer.urls")),
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('', include('studyapp.urls')),
     # Additional URL patterns must be mentioned here (if required)
 ]
