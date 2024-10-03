@@ -41,16 +41,17 @@
     </div>
  
     <script>
-        // Function to update the countdown timer
+        // Function to update the study timer
         function updateTimer() {
             var hours = parseInt(document.getElementById('timespent').textContent.split(':')[0]);
             var minutes = parseInt(document.getElementById('timespent').textContent.split(':')[1]);
             var seconds = parseInt(document.getElementById('timespent').textContent.split(':')[2]);
+            
  
-            if (seconds < 60) {
+            if (seconds < 59) {
                 seconds++;
             } else {
-                if (minutes < 60) {
+                if (minutes < 59) {
                     minutes++;
                     seconds = 0;
                 } else {
@@ -66,6 +67,7 @@
                 (minutes < 10 ? '0' : '') + minutes + ' : ' +
                 (seconds < 10 ? '0' : '') + seconds;
         }
+        
  
         
  
