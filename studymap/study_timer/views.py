@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from . models import Stopwatch
 from django.template import loader
@@ -23,4 +23,6 @@ def get_count(request):
     count.time_spent += 1
     count.save()
     return JsonResponse({"study_time":count.time_spent})
+
+
 
