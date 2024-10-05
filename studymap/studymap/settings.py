@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "study_timer.apps.StudyTimerConfig",
+    "studyapp.apps.StudyAppConfig",
+    "study_timer.apps.StudyTimerConfig"
 ]
 
 MIDDLEWARE = [

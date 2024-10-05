@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UserRegistrationForm
+from . models import Stopwatch
+from datetime import datetime
 
 def register(request):
     if request.method == 'POST':
@@ -41,3 +43,33 @@ def dashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
     return render(request, 'studyapp/templates/dashboard.html')
+
+def study_time(request):
+    timer_obj = Stopwatch.objects.first()
+    get_time = timer_obj.time_spent
+    hours = get_time // 3600
+    minutes = (get_time%3600) // 60
+    seconds = ((get_time%3600)%60)
+
+    timespent = {
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        }
+    return render(request, "timer.html",{"timespent":timespent})
+
+def update_time(request): # Unused right now, but useful for saving study times later
+    count = Stopwatch.objects.first()
+    count.time_spent = count.time_start - datetime.now()
+    count.save()
+    get_time = count.time_spent
+    hours = get_time // 3600
+    minutes = (get_time%3600) // 60
+    seconds = ((get_time%3600)%60)
+    time_spent = {
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds
+        
+    }
+    return render(request,"timespent.html",{"time_spent":time_spent})
