@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "studyapp.apps.StudyAppConfig",
-    "study_timer.apps.StudyTimerConfig",
+    
 ]
 
 MIDDLEWARE = [

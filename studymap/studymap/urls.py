@@ -21,7 +21,6 @@ from . import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.home, name='home'),
-    path("timer/", include("study_timer.urls")),
     path('', include('studyapp.urls')),
     # Additional URL patterns must be mentioned here (if required)
 ]
