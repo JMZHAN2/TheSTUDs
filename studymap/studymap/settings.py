@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "studyapp.apps.StudyAppConfig",
-    "study_timer.apps.StudyTimerConfig"
+    "study_timer.apps.StudyTimerConfig",
+    "rest_framework" # Added as step 1 to connect backend to frontend.
 ]
 
 MIDDLEWARE = [
