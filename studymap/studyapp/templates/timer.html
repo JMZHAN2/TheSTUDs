@@ -1,19 +1,37 @@
+<!-- stopwatch/templates/stopwatch/stopwatch.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Study Timer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f4f4f4;
         }
-        
         h1 {
             color: #333;
         }
+        .stopwatch {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8b00fd;
         
+        }
+        button {
+            background-color: #ffffff; 
+            border: none;
+            color: rgb(0, 0, 0);
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 12px;
+            border: 2px solid #8b00fd;
+        }
         #timer {
             background-color: #fff;
             border-radius: 5px;
@@ -22,57 +40,60 @@
             margin: 20px auto;
             max-width: 300px;
         }
-        
-        #timespent {
-            font-size: 24px;
-            font-weight: bold;
-            color: #8b00fd;
-        }
-        
     </style>
 </head>
 <body>
     <h1>Study Timer</h1>
     <div id="timer">
         <h2>Time Spent:</h2>
-        <div id="timespent">
-            {{ timespent.hours|stringformat:"02d" }} : {{ timespent.minutes|stringformat:"02d" }} : {{ timespent.seconds|stringformat:"02d" }}
+        <div class="stopwatch">
+            <span id="time">00:00:00</span>
         </div>
+        <button id="start-btn">Start</button>
+        <button id="stop-btn" disabled>Stop</button>
     </div>
- 
+    
+
     <script>
-        // Function to update the study timer
-        function updateTimer() {
-            var hours = parseInt(document.getElementById('timespent').textContent.split(':')[0]);
-            var minutes = parseInt(document.getElementById('timespent').textContent.split(':')[1]);
-            var seconds = parseInt(document.getElementById('timespent').textContent.split(':')[2]);
-            
- 
-            if (seconds < 59) {
-                seconds++;
-            } else {
-                if (minutes < 59) {
-                    minutes++;
-                    seconds = 0;
-                } else {
-                    hours++;
-                    minutes = 0;
-                    seconds = 0;
-                }
-            }
- 
-            // Update the timer display
-            document.getElementById('timespent').textContent =
-                (hours < 10 ? '0' : '') + hours + ' : ' +
-                (minutes < 10 ? '0' : '') + minutes + ' : ' +
-                (seconds < 10 ? '0' : '') + seconds;
+        let timer;
+        let seconds = 0, minutes = 0, hours = 0;
+
+        function formatTime(num) {
+            return num < 10 ? '0' + num : num;
         }
-        
- 
-        
- 
-        // Update the timer every second
-        setInterval(updateTimer, 1000);
+
+        function startStopwatch() {
+            timer = setInterval(() => {
+                seconds++;
+                if (seconds === 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+                if (minutes === 60) {
+                    minutes = 0;
+                    hours++;
+                }
+
+                document.getElementById('time').textContent = 
+                    `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+            }, 1000);
+        }
+
+        function stopStopwatch() {
+            clearInterval(timer);
+        }
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            startStopwatch();
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('stop-btn').disabled = false;
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', () => {
+            stopStopwatch();
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('stop-btn').disabled = true;
+        });
     </script>
 </body>
 </html>
