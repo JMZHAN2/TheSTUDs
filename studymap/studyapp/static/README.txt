@@ -1,0 +1,1 @@
+The static directory holds all images, CSS, and JS files!
