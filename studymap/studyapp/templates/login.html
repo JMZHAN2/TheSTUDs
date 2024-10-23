@@ -1,4 +1,5 @@
 {% load static %}
+{% load sass_tags %}
 
 <html>
 <!-- The head contains metadata, placed between <html> and <body> tag -->
@@ -8,22 +9,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- CSS stylesheet -->
-    <link rel="stylesheet" href="{% sass_src 'static/scss/styles.scss' %}"/>
-
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
 
 </head>
 
 <body>
-<h2>Login</h2>
-    <form method="POST">
+    <!-- Header -->
+    <header>
+        <h1>
+            <b>StudyMap</b>
+        </h1>
+        <p class="tagline">Visualize your study habits!</p>
+    </header>
+
+    <!-- Main form for login -->
+    <form method="POST"> <!--"POST" sends variables as HTTP post transaction-->
         {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-        <button type="submit">Login</button>
+        <div>
+            <input class="nb-input blue" type="text" name="username" id="username" placeholder="Username" required />
+        </div>
+        <div>
+            <input class="nb-input blue" type="password" name="password" id="password" placeholder="Password" required />
+        </div>
+        <div>
+            <button class="nb-button blue" type="submit"> Login </button>
+        </div>
     </form>
 
+    <!-- Sends error messages -->
     {% if messages %}
         <ul>
         {% for message in messages %}
@@ -31,6 +44,16 @@
         {% endfor %}
         </ul>
     {% endif %}
+
+    <!-- Put link to sign-up page!-->
+    <form method="POST">
+        {% csrf_token %}
+        <p>Don't have an account? Sign up here!</p>
+        <div>
+            <button class="nb-button blue" type="submit"> Sign-up </button>
+        </div>
+    </form>
+
 </body>
 
 </html>

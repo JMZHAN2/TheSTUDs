@@ -8,6 +8,7 @@ from .forms import UserRegistrationForm
 from . models import Stopwatch
 from datetime import datetime
 
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -33,7 +34,9 @@ def login_view(request):
             return redirect('dashboard')
         else:
             messages.error(request, 'Invalid username or password.')
+
     return render(request, 'studyapp/templates/login.html')
+
 
 def logout_view(request):
     logout(request)
