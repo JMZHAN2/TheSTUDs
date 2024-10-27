@@ -3,3 +3,13 @@
 <a href="{% url 'logout' %}">Logout</a>
 <a href="{% url 'study_timer' %}">Study Timer</a>
 
+
+<p>Your current study streak: {{ streak }} days 🔥</p>
+
+<!-- Display study sessions or any other relevant information -->
+<ul>
+    {% for session in study_sessions %}
+    <li>{{ session.title }}: {{ session.get_duration.hours }} hours, {{ session.get_duration.minutes }} minutes, {{ session.get_duration.seconds }} seconds</li>
+    {% endfor %}
+</ul>
+

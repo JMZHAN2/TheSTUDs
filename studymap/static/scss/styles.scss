@@ -1,0 +1,24 @@
+@import 'https://unpkg.com/neobrutalismcss@latest';
+
+body {
+    background-color: #f0f0f0;
+    // Add your custom styles here
+}
+
+form {
+    max-width: 300px; /* Adjust the width as needed */
+    //margin: 0 auto;   /* Centers the form horizontally */
+}
+
+/* Style the divs containing the inputs and button */
+form div {
+    margin-bottom: 15px; /* Adds space between elements */
+}
+
+/*
+h2 {
+    max-width: fit-content;
+    text-align: center;
+    margin-inline: auto;
+}
+*/

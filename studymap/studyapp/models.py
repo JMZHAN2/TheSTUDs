@@ -3,19 +3,35 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Stopwatch(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     time_spent = models.IntegerField(default=0)
     time_start = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=40)
-    
-    
     def __str__(self):
-        return f"{self.time_spent}"
+        return f"{self.title}: {self.time_spent} seconds"
+    def get_duration(self):
+        hours = self.time_spent // 3600
+        minutes = (self.time_spent % 3600) // 60
+        seconds = self.time_spent % 60
+        return {'hours': hours, 'minutes': minutes, 'seconds': seconds}
+    
+    @staticmethod
+    def calculate_study_streak(user):
+        # retrieve all study sessions and order by start time
+        sessions = Stopwatch.objects.filter(user=user).order_by('-time_start')
 
-class StudyStreak(models.Model):
-    users = models.ForeignKey(User, on_delete = models.CASCADE)
-    streak_days = models.PositiveIntegerField(default=0)  
-    start_date = models.DateField(null=True, blank=True) 
-    last_study_date = models.DateField(null=True, blank=True)  
+        streak = 0
+        last_study_date = None
+        for session in sessions:
+            study_date = session.time_start.date()
+            if last_study_date is None or (last_study_date - study_date).days == 1:
+                streak += 1
+                last_study_date = study_date
+            else:
+                break  # stop counting if there's a gap
+        return streak
 
-    def __str__(self):
-        return f"{self.user.username} - Streak: {self.streak_days} days"
+
+
+
+

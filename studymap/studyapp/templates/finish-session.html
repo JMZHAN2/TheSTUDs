@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Good Work!</title>
+    <!-- Include any necessary CSS here -->
+</head>
+<body>
+    
+    <!-- Display success message -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Display time spent details -->
+    
+
+    <div>
+        <form action="{% url 'dashboard' %}" method="get">
+            <button type="submit">Go to Dashboard</button>
+        </form>
+        <form action="{% url 'study_timer' %}" method="get">
+            <button type="submit">Back to Timer</button>
+        </form>
+    </div>
+</body>
+</html>
