@@ -1,15 +1,49 @@
-<!DOCTYPE html>
+{% load static %}
+{% load sass_tags %}
+
 <html>
+<!-- The head contains metadata, placed between <html> and <body> tag -->
 <head>
-    <title>Register</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
 </head>
+
 <body>
-    <h2>Create an Account</h2>
-    <form method="post">
+    <!-- Header -->
+    <header>
+        <h1>
+            <b>StudyMap</b>
+        </h1>
+        <p class="tagline">Visualize your study habits!</p>
+    </header>
+
+    <!-- Main form for registration -->
+    <h2>Create an account</h2>
+    <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
+        <!-- Render each form field manually to apply custom classes -->
+        <div>
+            <input class="nb-input blue" type="text" name="username" id="id_username" placeholder="Username" required />
+        </div>
+        <div>
+            <input class="nb-input blue" type="email" name="email" id="id_email" placeholder="Email" required />
+        </div>
+        <div>
+            <input class="nb-input blue" type="password" name="password1" id="id_password1" placeholder="Password" required />
+        </div>
+        <div>
+            <input class="nb-input blue" type="password" name="password2" id="id_password2" placeholder="Confirm Password" required />
+        </div>
+        <div>
+            <button class="nb-button blue" type="submit">Register</button>
+        </div>
     </form>
+
+    <!-- Sends error messages -->
     {% if messages %}
         <ul>
         {% for message in messages %}

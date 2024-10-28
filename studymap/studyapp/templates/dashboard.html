@@ -1,4 +1,4 @@
-<h2>Welcome to your dashboard!</h2>
+<!-- <h2>Welcome to your dashboard!</h2>
 <p>You are logged in as {{ request.user.username }}</p>
 <a href="{% url 'logout' %}">Logout</a>
 <a href="{% url 'study_timer' %}">Study Timer</a>
@@ -6,10 +6,59 @@
 
 <p>Your current study streak: {{ streak }} days 🔥</p>
 
-<!-- Display study sessions or any other relevant information -->
+ Display study sessions or any other relevant information
 <ul>
     {% for session in study_sessions %}
     <li>{{ session.title }}: {{ session.get_duration.hours }} hours, {{ session.get_duration.minutes }} minutes, {{ session.get_duration.seconds }} seconds</li>
     {% endfor %}
 </ul>
+-->
 
+{% load static %}
+{% load sass_tags %}
+
+<html>
+<!-- The head contains metadata, placed between <html> and <body> tag -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <h1>
+            <b>StudyMap</b>
+        </h1>
+        <p class="tagline">Visualize your study habits!</p>
+    </header>
+
+    <!-- Dashboard Content -->
+    <h2>Welcome to your dashboard!</h2>
+    <p>You are logged in as {{ request.user.username }}</p>
+
+    <!-- Action Buttons -->
+    <div class="dashboard-buttons">
+        <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
+        <a href="{% url 'study_timer' %}" class="nb-button blue">Study Timer</a>
+    </div>
+
+    <!-- Study Streak -->
+    <p>Your current study streak: {{ streak }} days 🔥</p>
+
+    <!-- Display study sessions or any other relevant information -->
+    <ul class="study-sessions">
+        {% for session in study_sessions %}
+        <li>
+            <strong>{{ session.title }}</strong>: {{ session.get_duration.hours }} hours, {{ session.get_duration.minutes }} minutes, {{ session.get_duration.seconds }} seconds
+        </li>
+        {% empty %}
+        <li>No study sessions found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
