@@ -1,29 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+{% load sass_tags %}
+
+<html>
+<!-- The head contains metadata, placed between <html> and <body> tag -->
 <head>
+    <!-- Required meta tags -->
     <meta charset="UTF-8">
     <title>Good Work!</title>
-    <!-- Include any necessary CSS here -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
 </head>
+
 <body>
-    
+    <!-- Header -->
+    <header>
+        <h1>
+            <b>StudyMap</b>
+        </h1>
+        <p class="tagline">Visualize your study habits!</p>
+    </header>
+
     <!-- Display success message -->
     {% if messages %}
+        <ul>
         {% for message in messages %}
-            <div class="message">{{ message }}</div>
+            <li class="message">{{ message }}</li>
         {% endfor %}
+        </ul>
     {% endif %}
 
     <!-- Display time spent details -->
-    
+    <div class="session-details">
+        <p>You have successfully completed your study session!</p>
+        <p>Total time spent: {{ total_time }}</p>
+    </div>
 
-    <div>
-        <form action="{% url 'dashboard' %}" method="get">
-            <button type="submit">Go to Dashboard</button>
-        </form>
-        <form action="{% url 'study_timer' %}" method="get">
-            <button type="submit">Back to Timer</button>
-        </form>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{% url 'dashboard' %}" class="nb-button blue">Go to Dashboard</a>
+        <a href="{% url 'study_timer' %}" class="nb-button blue">Back to Timer</a>
     </div>
 </body>
 </html>
