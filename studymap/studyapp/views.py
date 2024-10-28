@@ -12,8 +12,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 
-
-
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -64,9 +62,15 @@ def dashboard(request):
 
 @login_required
 def study_time(request):
-    stopwatch, created = Stopwatch.objects.get_or_create(user=request.user, defaults={"title": "Study Session"})
+    user_stopwatches = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
     
-    return render(request, "timer.html", {"stopwatch": stopwatch})
+    if not user_stopwatches.exists():
+        stopwatch = Stopwatch.objects.create(user=request.user, title="Study Session")
+    else:
+        stopwatch = user_stopwatches.first()  
+    
+    return render(request, "timer.html", {"stopwatch": stopwatch, "all_stopwatches": user_stopwatches})
+    
     
 
 @login_required
@@ -84,16 +88,13 @@ def finish_session(request):
         stopwatch_id = request.POST.get("stopwatch_id")
         #print(f"Stopwatch ID received: {stopwatch_id}")
         time_spent = request.POST.get("time_spent")
-        stopwatch = get_object_or_404(Stopwatch, id=stopwatch_id, user=request.user)
-
-        # Calculate the time spent
-        current_time = timezone.now()
-        #time_diff = (current_time - stopwatch.time_start).total_seconds()
+        # Create a new Stopwatch instance for each session
+        stopwatch = Stopwatch.objects.create(
+            user=request.user,
+            time_spent=int(time_spent),
+            title="Study Session"  # Optionally, make the title dynamic if desired
+        )
         
-        
-        # Update time_spent
-        stopwatch.time_spent = int(time_spent)
-        stopwatch.save()
 
         # Calculate hours, minutes, and seconds for the success message
         hours = stopwatch.time_spent // 3600
