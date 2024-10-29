@@ -15,10 +15,65 @@ form div {
     margin-bottom: 15px; /* Adds space between elements */
 }
 
-/*
-h2 {
-    max-width: fit-content;
-    text-align: center;
-    margin-inline: auto;
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex !important;
 }
-*/
+
+/* Left Column */
+.dashboard-left {
+    flex: 1;
+    margin-right: 20px;
+}
+
+/* Right Column */
+.dashboard-right {
+    flex: 0 0 300px; /* Added flex shorthand */
+}
+
+/* Study Sessions Container */
+.study-sessions-container {
+    max-height: 500px; /* Adjust the height as needed */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Individual Study Session */
+.study-session {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Optional: Scrollbar Styling */
+.study-sessions-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.study-sessions-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.study-sessions-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .dashboard-left, .dashboard-right {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .dashboard-right {
+        margin-top: 20px;
+    }
+}

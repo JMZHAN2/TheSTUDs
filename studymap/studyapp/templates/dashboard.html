@@ -2,7 +2,6 @@
 {% load sass_tags %}
 
 <html>
-<!-- The head contains metadata, placed between <html> and <body> tag -->
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,28 +20,38 @@
         <p class="tagline">Visualize your study habits!</p>
     </header>
 
-    <!-- Dashboard Content -->
-    <h2>Welcome to your dashboard!</h2>
-    <p>You are logged in as {{ request.user.username }}</p>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Left Column -->
+        <div class="dashboard-left">
+            <!-- Dashboard Content -->
+            <h2>Welcome to your dashboard!</h2>
+            <p>You are logged in as {{ request.user.username }}</p>
 
-    <!-- Action Buttons -->
-    <div class="dashboard-buttons">
-        <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
-        <a href="{% url 'study_timer' %}" class="nb-button blue">Study Timer</a>
+            <!-- Action Buttons -->
+            <div class="dashboard-buttons">
+                <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
+                <a href="{% url 'study_timer' %}" class="nb-button blue">Study Timer</a>
+            </div>
+
+            <!-- Study Streak -->
+            <p>Your current study streak: {{ streak }} days 🔥</p>
+        </div>
+
+        <!-- Right Column -->
+        <div class="dashboard-right">
+            <h3>Your Study Sessions</h3>
+            <div class="study-sessions-container">
+                {% for session in study_sessions %}
+                <div class="study-session">
+                    <strong>{{ session.title }}</strong><br>
+                    {{ session.get_duration.hours }} hours, {{ session.get_duration.minutes }} minutes, {{ session.get_duration.seconds }} seconds
+                </div>
+                {% empty %}
+                <p>No study sessions found.</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
-    <!-- Study Streak -->
-    <p>Your current study streak: {{ streak }} days 🔥</p>
-
-    <!-- Display study sessions or any other relevant information -->
-    <ul class="study-sessions">
-        {% for session in study_sessions %}
-        <li>
-            <strong>{{ session.title }}</strong>: {{ session.get_duration.hours }} hours, {{ session.get_duration.minutes }} minutes, {{ session.get_duration.seconds }} seconds
-        </li>
-        {% empty %}
-        <li>No study sessions found.</li>
-        {% endfor %}
-    </ul>
 </body>
 </html>
