@@ -1,3 +1,5 @@
+{% load static %}
+{% load sass_tags %}
 <!-- stopwatch/templates/stopwatch/stopwatch.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -5,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stopwatch</title>
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
+<!--
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,25 +45,39 @@
             max-width: 300px;
         }
     </style>
+-->
 </head>
 <body>
-    <h1>Study Timer</h1>
-    <div id="timer">
-        <h2>Time Spent:</h2>
+
+    <header>
+        <h1 class="timerTitleDiv">
+            <img class="logoImgTimer" src="../../static/media/logoIcon.svg" alt="studymap logo"></img>
+            <b class="timerTitle">session timer</b>
+        </h1>
+    </header>
+
+    <div class="timerOuterDiv" id="timer">
         <div class="stopwatch">
-            <span id="time">00:00:00</span>
+            <span class="timerNums" id="time">00:00:00</span>
         </div>
-        <button id="start-btn">Start</button>
-        <button id="stop-btn" disabled>Stop</button>
+        <div class="secMinHrs">
+            <p class="secMinHrsTxt">hours</p>
+            <p class="secMinHrsTxt">minutes</p>
+            <p class="secMinHrsTxt">seconds</p>
+        </div>
+        <button class="timerStartBtn" id="start-btn">start</button>
+        <button class="timerStopBtn" id="stop-btn" disabled>stop</button>
+        <!--<button class="finishSessionBtn" type="submit" id="finish-btn">finish session</button>-->
+        <!--<h2 class="timeSpent">time spent:</h2>-->
     </div>
     <div>
         <form method="POST" action="{% url 'finish_session' %}" id="finish-form">
             {% csrf_token %}
             <input type="hidden" name="stopwatch_id" value="{{ stopwatch.id }}">
             <input type="hidden" name="time_spent" id="time-spent" value="0"> 
-            <button type="submit" id="finish-btn">Finish Session</button>
+            <button class="finishSessionBtn" type="submit" id="finish-btn">finish session</button>
         </form>
-        <p>You are logged in as {{ request.user.username }}</p>
+        <p class="timerLoginInfo">you are logged in as {{ request.user.username }}</p>
     </div>
 
     <script>

@@ -16,23 +16,23 @@
 <body>
     <!-- Header -->
     <header>
-        <h1>
-            <b>StudyMap</b>
+        <h1 class="loginTitleDiv">
+            <img class="logoImg" src="../../static/media/logoIcon.svg" alt="studymap logo"></img>
+            <b class="loginTitle">studymap</b>
         </h1>
-        <p class="tagline">Visualize your study habits!</p>
     </header>
 
     <!-- Main form for login -->
     <form method="POST"> <!--"POST" sends variables as HTTP post transaction-->
         {% csrf_token %}
         <div>
-            <input class="nb-input blue" type="text" name="username" id="username" placeholder="Username" required />
+            <input class="nb-input blue" type="text" name="username" id="username" placeholder="username" required />
         </div>
         <div>
-            <input class="nb-input blue" type="password" name="password" id="password" placeholder="Password" required />
+            <input class="nb-input blue" type="password" name="password" id="password" placeholder="password" required />
         </div>
         <div>
-            <button class="nb-button blue" type="submit"> Login </button>
+            <button class="nb-button blue" type="submit">login</button>
         </div>
     </form>
 
@@ -45,7 +45,7 @@
         </ul>
     {% endif %}
 
-    <p>Don't have an account? <a href="{% url 'register' %}" class="nb-button blue">Sign-Up</a></p>
+    <p class="signUpText">new user? sign up <a href="{% url 'register' %}" class="signUpTextLink">here</a></p>
 
 </body>
 
