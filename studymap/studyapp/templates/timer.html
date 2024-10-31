@@ -1,10 +1,19 @@
-<!-- stopwatch/templates/stopwatch/stopwatch.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Stopwatch</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,11 +27,10 @@
             font-size: 24px;
             font-weight: bold;
             color: #8b00fd;
-        
         }
         button {
-            background-color: #ffffff; 
-            border: none;
+            background-color: #ffffff;
+            border: none; !important;
             color: rgb(0, 0, 0);
             padding: 5px 10px;
             text-align: center;
@@ -40,8 +48,15 @@
             margin: 20px auto;
             max-width: 300px;
         }
+        #map {
+            height: 400px;
+            width: 90%;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
     </style>
 </head>
+
 <body>
     <h1>Study Timer</h1>
     <div id="timer">
@@ -56,7 +71,7 @@
         <form method="POST" action="{% url 'finish_session' %}" id="finish-form">
             {% csrf_token %}
             <input type="hidden" name="stopwatch_id" value="{{ stopwatch.id }}">
-            <input type="hidden" name="time_spent" id="time-spent" value="0"> 
+            <input type="hidden" name="time_spent" id="time-spent" value="0">
             <button type="submit" id="finish-btn">Finish Session</button>
         </form>
         <p>You are logged in as {{ request.user.username }}</p>
@@ -82,7 +97,7 @@
                     hours++;
                 }
 
-                document.getElementById('time').textContent = 
+                document.getElementById('time').textContent =
                     `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
             }, 1000);
         }
@@ -103,13 +118,64 @@
             document.getElementById('stop-btn').disabled = true;
         });
         document.getElementById('finish-btn').addEventListener('click', (event) => {
-            // Capture elapsed time in seconds
             stopStopwatch();
-            // Calculate total time spent in seconds
             const totalTimeSpent = hours * 3600 + minutes * 60 + seconds;
-            // Set the value of the hidden input
             document.getElementById('time-spent').value = totalTimeSpent;
         });
+    </script>
+
+    <div id="locationStatus" style="margin-top: 20px; font-size: 16px; color: #555;"></div>
+    <div id="map"></div>
+
+    <script>
+        const locationStatus = document.getElementById("locationStatus");
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                locationStatus.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            locationStatus.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+            const map = L.map('map').setView([latitude, longitude], 13);
+
+            // Investigate: warns that functions are unresovled
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup("You are here.")
+                .openPopup();
+        }
+
+        function showError(error) {
+            error.UNKNOWN_ERROR = undefined;
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    locationStatus.innerHTML = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    locationStatus.innerHTML = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    locationStatus.innerHTML = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    locationStatus.innerHTML = "An unknown error occurred.";
+                    break;
+            }
+        }
+
+        getLocation();
     </script>
 </body>
 </html>

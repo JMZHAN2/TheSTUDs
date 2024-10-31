@@ -46,7 +46,6 @@ def logout_view(request):
     return redirect('login')
 
 
-
 def dashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -60,6 +59,7 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
+
 @login_required
 def study_time(request):
     user_stopwatches = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
@@ -70,17 +70,16 @@ def study_time(request):
         stopwatch = user_stopwatches.first()  
     
     return render(request, "timer.html", {"stopwatch": stopwatch, "all_stopwatches": user_stopwatches})
-    
-    
+
 
 @login_required
 def start_study_session(request):
-    
     if request.method == 'POST':
         title = request.POST.get('title') 
         stopwatch = Stopwatch(user=request.user, title=title)
         stopwatch.save()
         return redirect('dashboard')
+
 
 @login_required
 def finish_session(request):
@@ -94,7 +93,6 @@ def finish_session(request):
             time_spent=int(time_spent),
             title="Study Session"  # Optionally, make the title dynamic if desired
         )
-        
 
         # Calculate hours, minutes, and seconds for the success message
         hours = stopwatch.time_spent // 3600
@@ -111,9 +109,6 @@ def finish_session(request):
     
     # Handle cases where the method is not POST
     return render(request, "finish-session.html")
-
-
-
 
 
 """def update_time(request): # Unused right now, but useful for saving study times later
