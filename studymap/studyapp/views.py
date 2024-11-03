@@ -108,7 +108,7 @@ def finish_session(request):
                                   f"{minutes} minutes, and "
                                   f"{seconds} seconds.")
 
-        # Optionally render a response or redirect
+        
         return render(request, "finish-session.html", {"time_spent": stopwatch.get_duration()})
     
     # Handle cases where the method is not POST
