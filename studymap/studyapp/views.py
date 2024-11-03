@@ -85,13 +85,17 @@ def start_study_session(request):
 def finish_session(request):
     if request.method == "POST":
         stopwatch_id = request.POST.get("stopwatch_id")
-        #print(f"Stopwatch ID received: {stopwatch_id}")
+        
         time_spent = request.POST.get("time_spent")
+        session_title = request.POST.get("session_title", "").strip()
+        print(f"Session Title: '{session_title}'")
         # Create a new Stopwatch instance for each session
+        if not session_title:
+            session_title = "Study Session"
         stopwatch = Stopwatch.objects.create(
             user=request.user,
             time_spent=int(time_spent),
-            title="Study Session"  # Optionally, make the title dynamic if desired
+            title= session_title  
         )
 
         # Calculate hours, minutes, and seconds for the success message
@@ -111,18 +115,4 @@ def finish_session(request):
     return render(request, "finish-session.html")
 
 
-"""def update_time(request): # Unused right now, but useful for saving study times later
-    count = Stopwatch.objects.first()
-    count.time_spent = count.time_start - datetime.now()
-    count.save()
-    get_time = count.time_spent
-    hours = get_time // 3600
-    minutes = (get_time%3600) // 60
-    seconds = ((get_time%3600)%60)
-    time_spent = {
-        'hours': hours,
-        'minutes': minutes,
-        'seconds': seconds
-        
-    }
-    return render(request,"timespent.html",{"time_spent":time_spent})"""
+

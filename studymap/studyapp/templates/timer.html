@@ -30,7 +30,7 @@
         }
         button {
             background-color: #ffffff;
-            border: none; !important;
+            border: none !important;
             color: rgb(0, 0, 0);
             padding: 5px 10px;
             text-align: center;
@@ -67,14 +67,20 @@
         <button id="start-btn">Start</button>
         <button id="stop-btn" disabled>Stop</button>
     </div>
+   
     <div>
         <form method="POST" action="{% url 'finish_session' %}" id="finish-form">
             {% csrf_token %}
             <input type="hidden" name="stopwatch_id" value="{{ stopwatch.id }}">
             <input type="hidden" name="time_spent" id="time-spent" value="0">
+            
+            <!-- Input for session title -->
+            <label for="session-title">Session Title:</label>
+            <input type="text" id="session-title" name="session_title" required>
             <button type="submit" id="finish-btn">Finish Session</button>
+            <p>You are logged in as {{ request.user.username }}</p>
+            
         </form>
-        <p>You are logged in as {{ request.user.username }}</p>
     </div>
 
     <script>
