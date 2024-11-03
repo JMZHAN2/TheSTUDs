@@ -88,7 +88,7 @@ def finish_session(request):
         
         time_spent = request.POST.get("time_spent")
         session_title = request.POST.get("session_title", "").strip()
-        print(f"Session Title: '{session_title}'")
+        
         # Create a new Stopwatch instance for each session
         if not session_title:
             session_title = "Study Session"
@@ -103,13 +103,15 @@ def finish_session(request):
         minutes = (stopwatch.time_spent % 3600) // 60
         seconds = stopwatch.time_spent % 60
 
-        # Create a success message
-        messages.success(request, f"Good work! You studied for {hours} hours, "
-                                  f"{minutes} minutes, and "
-                                  f"{seconds} seconds.")
+        
 
         
-        return render(request, "finish-session.html", {"time_spent": stopwatch.get_duration()})
+        return render(request, "finish-session.html", {
+            "time_spent": stopwatch.get_duration(),
+            "hours": hours,
+            "minutes": minutes,
+            "seconds": seconds
+        })
     
     # Handle cases where the method is not POST
     return render(request, "finish-session.html")

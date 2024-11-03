@@ -23,19 +23,14 @@
     </header>
 
     <!-- Display success message -->
-    {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li class="message">{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-
-    <!-- Display time spent details -->
-    <div class="session-details">
-        <p>You have successfully completed your study session!</p>
-        <p>Total time spent: {{ total_time }}</p>
+    <div class="success-message">
+        Good work! You studied for:
+        {% if hours > 0 %}{{ hours }} hours{% endif %}
+        {% if minutes > 0 %} {{ minutes }} minutes{% endif %}
+        {% if seconds > 0 %} {{ seconds }} seconds{% endif %}.
     </div>
+
+   
 
     <!-- Action Buttons -->
     <div class="action-buttons">
