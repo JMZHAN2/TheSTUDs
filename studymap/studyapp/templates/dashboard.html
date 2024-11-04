@@ -45,7 +45,14 @@
                 {% for session in study_sessions %}
                 <div class="study-session">
                     <strong>{{ session.title }}</strong><br>
-                    {{ session.get_duration.hours }} hours, {{ session.get_duration.minutes }} minutes, {{ session.get_duration.seconds }} seconds
+                    Time:
+                    {% if session.get_duration.hours > 0 %}
+                        {{ session.get_duration.hours }}h
+                    {% endif %}
+                    {% if session.get_duration.minutes > 0 %}
+                        {{ session.get_duration.minutes }}m
+                    {% endif %}
+                    {{ session.get_duration.seconds }}s
                 </div>
                 {% empty %}
                 <p>No study sessions found.</p>

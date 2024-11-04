@@ -85,11 +85,13 @@ def start_study_session(request):
 def finish_session(request):
     if request.method == "POST":
         stopwatch_id = request.POST.get("stopwatch_id")
-        #print(f"Stopwatch ID received: {stopwatch_id}")
+        
         time_spent = request.POST.get("time_spent")
         latitude_ = request.POST.get("latitude")
         longitude_ = request.POST.get("longitude")
         # Create a new Stopwatch instance for each session
+        if not session_title:
+            session_title = "Study Session"
         stopwatch = Stopwatch.objects.create(
             user=request.user,
             time_spent=int(time_spent),
@@ -104,30 +106,18 @@ def finish_session(request):
         minutes = (stopwatch.time_spent % 3600) // 60
         seconds = stopwatch.time_spent % 60
 
-        # Create a success message
-        messages.success(request, f"Good work! You studied for {hours} hours, "
-                                  f"{minutes} minutes, and "
-                                  f"{seconds} seconds.")
+        
 
-        # Optionally render a response or redirect
-        return render(request, "finish-session.html", {"time_spent": stopwatch.get_duration()})
+        
+        return render(request, "finish-session.html", {
+            "time_spent": stopwatch.get_duration(),
+            "hours": hours,
+            "minutes": minutes,
+            "seconds": seconds
+        })
     
     # Handle cases where the method is not POST
     return render(request, "finish-session.html")
 
 
-"""def update_time(request): # Unused right now, but useful for saving study times later
-    count = Stopwatch.objects.first()
-    count.time_spent = count.time_start - datetime.now()
-    count.save()
-    get_time = count.time_spent
-    hours = get_time // 3600
-    minutes = (get_time%3600) // 60
-    seconds = ((get_time%3600)%60)
-    time_spent = {
-        'hours': hours,
-        'minutes': minutes,
-        'seconds': seconds
-        
-    }
-    return render(request,"timespent.html",{"time_spent":time_spent})"""
+
