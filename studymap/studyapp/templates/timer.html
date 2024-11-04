@@ -53,6 +53,15 @@
             margin: 20px auto;
             border-radius: 5px;
         }
+        .zero-second-error {
+        color: red;
+        font-weight: bold;
+        
+        
+        padding: 10px;
+        margin: 10px 0; 
+        border-radius: 5px; 
+}
     </style>
 </head>
 
@@ -82,6 +91,11 @@
             
         </form>
     </div>
+    {% if error_message %}
+    <div class="zero-second-error">
+        {{ error_message }}
+    </div>
+    {% endif %}
 
     <script>
         let timer;

@@ -31,13 +31,14 @@ class Stopwatch(models.Model):
         streak = 0
         last_study_date = None
         for session in sessions:
-            study_date = session.time_start.date()
-            if study_date not in unique_study_dates:
-                unique_study_dates.add(study_date)
-                if last_study_date is None or (last_study_date - study_date).days == 1:
-                    streak += 1
-                    last_study_date = study_date
-                else:
-                    break  # stop counting if there's a gap
+            if session.time_spent >= 600:
+                study_date = session.time_start.date()
+                if study_date not in unique_study_dates:
+                    unique_study_dates.add(study_date)
+                    if last_study_date is None or (last_study_date - study_date).days == 1:
+                        streak += 1
+                        last_study_date = study_date
+                    else:
+                        break  # stop counting if there's a gap
         return streak
         

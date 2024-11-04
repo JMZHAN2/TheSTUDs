@@ -85,15 +85,28 @@ def start_study_session(request):
 def finish_session(request):
     if request.method == "POST":
         stopwatch_id = request.POST.get("stopwatch_id")
+
+        try:
+            time_spent = int(request.POST.get("time_spent", 0))
+        except ValueError:
+            time_spent = 0 
         
-        time_spent = request.POST.get("time_spent")
         latitude_ = request.POST.get("latitude")
         longitude_ = request.POST.get("longitude")
         session_title = request.POST.get("session_title", "Study Session").strip()
 
+        if time_spent <= 0:
+            # Redirect to the timer page with an error message
+            error_message = "Cannot save a session 0 seconds long"
+            return render(request, "timer.html", {
+                "error_message": error_message,
+                "latitude": latitude_,
+                "longitude": longitude_,
+                "session_title": session_title,
+            })
+
         
         # Create a new Stopwatch instance for each session
-        
         stopwatch = Stopwatch.objects.create(
             user=request.user,
             time_spent=int(time_spent),
