@@ -74,6 +74,9 @@
             <input type="hidden" name="time_spent" id="time-spent" value="0">
             <input type="hidden" name="latitude" id="latitude" value="0">
             <input type="hidden" name="longitude" id="longitude" value="0">
+
+            <label for="session-title">Session Title:</label>
+            <input type="text" id="session-title" name="session_title" required>
             <button type="submit" id="finish-btn">Finish Session</button>
             <p>You are logged in as {{ request.user.username }}</p>
             

@@ -89,14 +89,15 @@ def finish_session(request):
         time_spent = request.POST.get("time_spent")
         latitude_ = request.POST.get("latitude")
         longitude_ = request.POST.get("longitude")
-        session_title = request.POST.get("session_title", "").strip()
+        session_title = request.POST.get("session_title", "Study Session").strip()
+
+        
         # Create a new Stopwatch instance for each session
-        if not session_title:
-            session_title = "Study Session"
+        
         stopwatch = Stopwatch.objects.create(
             user=request.user,
             time_spent=int(time_spent),
-            title="Study Session",  # Optionally, make the title dynamic if desired
+            title= session_title,  
             latitude = float(latitude_),
             longitude = float(longitude_),
 
