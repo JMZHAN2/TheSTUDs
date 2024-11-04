@@ -1,0 +1,14 @@
+@import 'https://unpkg.com/neobrutalismcss@latest';
+body {
+  background-color: #f0f0f0; }
+
+form {
+  max-width: 300px;
+  /* Adjust the width as needed */ }
+
+/* Style the divs containing the inputs and button */
+form div {
+  margin-bottom: 15px;
+  /* Adds space between elements */ }
+
+/*# sourceMappingURL=login.css.map */

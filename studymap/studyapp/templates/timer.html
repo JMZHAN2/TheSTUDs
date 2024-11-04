@@ -30,7 +30,7 @@
         }
         button {
             background-color: #ffffff;
-            border: none; !important;
+            border: none; 
             color: rgb(0, 0, 0);
             padding: 5px 10px;
             text-align: center;
@@ -72,6 +72,8 @@
             {% csrf_token %}
             <input type="hidden" name="stopwatch_id" value="{{ stopwatch.id }}">
             <input type="hidden" name="time_spent" id="time-spent" value="0">
+            <input type="hidden" name="latitude" id="latitude" value="0">
+            <input type="hidden" name="longitude" id="longitude" value="0">
             <button type="submit" id="finish-btn">Finish Session</button>
         </form>
         <p>You are logged in as {{ request.user.username }}</p>
@@ -141,6 +143,8 @@
         function showPosition(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
+            document.getElementById('latitude').value = latitude;
+            document.getElementById('longitude').value = longitude;
 
             locationStatus.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
 

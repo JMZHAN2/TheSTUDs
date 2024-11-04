@@ -87,11 +87,16 @@ def finish_session(request):
         stopwatch_id = request.POST.get("stopwatch_id")
         #print(f"Stopwatch ID received: {stopwatch_id}")
         time_spent = request.POST.get("time_spent")
+        latitude_ = request.POST.get("latitude")
+        longitude_ = request.POST.get("longitude")
         # Create a new Stopwatch instance for each session
         stopwatch = Stopwatch.objects.create(
             user=request.user,
             time_spent=int(time_spent),
-            title="Study Session"  # Optionally, make the title dynamic if desired
+            title="Study Session",  # Optionally, make the title dynamic if desired
+            latitude = float(latitude_),
+            longitude = float(longitude_),
+
         )
 
         # Calculate hours, minutes, and seconds for the success message

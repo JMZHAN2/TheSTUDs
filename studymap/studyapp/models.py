@@ -9,6 +9,9 @@ class Stopwatch(models.Model):
     time_spent = models.IntegerField(default=0)
     time_start = models.DateTimeField(default = timezone.now)
     title = models.CharField(max_length=40)
+    latitude = models.DecimalField(default = 0, max_digits=19, decimal_places=10, null = True, blank=True)
+    longitude = models.DecimalField(default = 0, max_digits=19, decimal_places=10, null = True, blank=True)
+
 
     def __str__(self):
         return f"{self.title}: {self.time_spent} seconds"
@@ -18,6 +21,7 @@ class Stopwatch(models.Model):
         minutes = (self.time_spent % 3600) // 60
         seconds = self.time_spent % 60
         return {'hours': hours, 'minutes': minutes, 'seconds': seconds}
+    
     
     @staticmethod
     def calculate_study_streak(user):
