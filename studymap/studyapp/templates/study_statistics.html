@@ -9,39 +9,37 @@
 
     <!-- CSS stylesheet -->
     <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
+    <title>Study Statistics</title>
 </head>
 
 <body>
     <!-- Header -->
     <header>
-        <h1>
-            <b>StudyMap</b>
-        </h1>
-        <p class="tagline">Visualize your study habits!</p>
+        <h1><b>StudyMap</b></h1>
+        <p class="tagline">Track and analyze your study patterns!</p>
     </header>
 
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
+    <!-- Statistics Container -->
+    <div class="statistics-container">
         <!-- Left Column -->
-        <div class="dashboard-left">
-            <!-- Dashboard Content -->
-            <h2>Welcome to your dashboard!</h2>
-            <p>You are logged in as {{ request.user.username }}</p>
+        <div class="statistics-left">
+            <h2>Study Statistics</h2>
+            <p>Viewing statistics for {{ request.user.username }}</p>
 
-            <!-- Action Buttons -->
+            <!-- Total and Average Study Time -->
+            <p><strong>Total Study Time:</strong> {{ total_time }} seconds</p>
+            <p><strong>Average Session Time:</strong> {{ average_time }} seconds</p>
+
+            <!-- Back to Dashboard Button -->
             <div class="dashboard-buttons">
+                <a href="{% url 'dashboard' %}" class="nb-button blue">Back to Dashboard</a>
                 <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
-                <a href="{% url 'study_timer' %}" class="nb-button blue">Study Timer</a>
-                <a href="{% url 'study_statistics' %}" class="nb-button blue">View Study Statistics</a>
             </div>
-
-            <!-- Study Streak -->
-            <p>Your current study streak: {{ streak }} days 🔥</p>
         </div>
 
         <!-- Right Column -->
-        <div class="dashboard-right">
-            <h3>Your Study Sessions</h3>
+        <div class="statistics-right">
+            <h3>Detailed Study Sessions</h3>
             <div class="study-sessions-container">
                 {% for session in study_sessions %}
                 <div class="study-session">
@@ -54,6 +52,8 @@
                         {{ session.get_duration.minutes }}m
                     {% endif %}
                     {{ session.get_duration.seconds }}s
+                    <br>
+                    Date: {{ session.time_start }}
                 </div>
                 {% empty %}
                 <p>No study sessions found.</p>
