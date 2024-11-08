@@ -82,29 +82,6 @@ def start_study_session(request):
 
 
 @login_required
-def study_statistics(request):
-    # Retrieve study sessions for the current user
-    study_sessions = Stopwatch.objects.filter(user=request.user)
-
-    # Calculate total study time
-    total_time = sum(session.time_spent for session in study_sessions)
-
-    # Calculate average session time
-    if study_sessions.exists():
-        average_time = total_time / study_sessions.count()
-    else:
-        average_time = 0
-
-    # Pass data to the template
-    context = {
-        'study_sessions': study_sessions,
-        'total_time': total_time,
-        'average_time': average_time,
-    }
-    return render(request, 'study_statistics.html', context)
-
-
-@login_required
 def finish_session(request):
     if request.method == "POST":
         stopwatch_id = request.POST.get("stopwatch_id")
