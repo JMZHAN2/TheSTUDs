@@ -1,0 +1,58 @@
+{% load static %}
+{% load sass_tags %}
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
+    <title>Study Statistics</title>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1><b>StudyMap</b></h1>
+        <p class="tagline">Track and analyze your study patterns!</p>
+    </header>
+    <!-- Statistics Container -->
+    <div class="statistics-container">
+        <!-- Left Column -->
+        <div class="statistics-left">
+            <h2>Study Statistics</h2>
+            <p>Viewing statistics for {{ request.user.username }}</p>
+            <!-- Total and Average Study Time -->
+            <p><strong>Total Study Time:</strong> {{ total_time }} seconds</p>
+            <p><strong>Average Session Time:</strong> {{ average_time }} seconds</p>
+            <!-- Back to Dashboard Button -->
+            <div class="dashboard-buttons">
+                <a href="{% url 'dashboard' %}" class="nb-button blue">Back to Dashboard</a>
+                <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
+            </div>
+        </div>
+        <!-- Right Column -->
+        <div class="statistics-right">
+            <h3>Detailed Study Sessions</h3>
+            <div class="study-sessions-container">
+                {% for session in study_sessions %}
+                <div class="study-session">
+                    <strong>{{ session.title }}</strong><br>
+                    Time:
+                    {% if session.get_duration.hours > 0 %}
+                        {{ session.get_duration.hours }}h
+                    {% endif %}
+                    {% if session.get_duration.minutes > 0 %}
+                        {{ session.get_duration.minutes }}m
+                    {% endif %}
+                    {{ session.get_duration.seconds }}s
+                    <br>
+                    Date: {{ session.time_start }}
+                </div>
+                {% empty %}
+                <p>No study sessions found.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
