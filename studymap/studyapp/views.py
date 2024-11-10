@@ -82,8 +82,8 @@ def start_study_session(request):
 
 @login_required
 def study_statistics(request):
-    # Retrieve study sessions for the current user
-    study_sessions = Stopwatch.objects.filter(user=request.user)
+    # Retrieve study sessions for the current user, sorted in reverse order to display recent first
+    study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
     # Calculate total study time
     total_time = sum(session.time_spent for session in study_sessions)
     # Calculate average session time
@@ -108,10 +108,18 @@ def finish_session(request):
         try:
             time_spent = int(request.POST.get("time_spent", 0))
         except ValueError:
-            time_spent = 0 
-        
-        latitude_ = request.POST.get("latitude")
-        longitude_ = request.POST.get("longitude")
+            time_spent = 0
+
+        # Convert latitude and longitude before passing
+        try:
+            latitude_ = float(request.POST.get("latitude"))
+        except (TypeError, ValueError):
+            latitude_ = None
+        try:
+            longitude_ = float(request.POST.get("longitude"))
+        except (TypeError, ValueError):
+            longitude_ = None
+
         session_title = request.POST.get("session_title", "Study Session").strip()
 
         if time_spent <= 0:
@@ -124,7 +132,6 @@ def finish_session(request):
                 "session_title": session_title,
             })
 
-        
         # Create a new Stopwatch instance for each session
         stopwatch = Stopwatch.objects.create(
             user=request.user,
@@ -140,9 +147,6 @@ def finish_session(request):
         minutes = (stopwatch.time_spent % 3600) // 60
         seconds = stopwatch.time_spent % 60
 
-        
-
-        
         return render(request, "finish-session.html", {
             "time_spent": stopwatch.get_duration(),
             "hours": hours,

@@ -36,7 +36,8 @@
             <div class="study-sessions-container">
                 {% for session in study_sessions %}
                 <div class="study-session">
-                    <strong>{{ session.title }}</strong><br>
+                    <strong>{{ session.title }}</strong>
+                    <br>
                     Time:
                     {% if session.get_duration.hours > 0 %}
                         {{ session.get_duration.hours }}h
@@ -47,6 +48,13 @@
                     {{ session.get_duration.seconds }}s
                     <br>
                     Date: {{ session.time_start }}
+                    <br>
+                    Coordinates:
+                    {% if session.latitude and session.longitude %}
+                        Latitude: {{ session.latitude|floatformat:6 }}, Longitude: {{ session.longitude|floatformat:6 }}
+                    {% else %}
+                        Location not available
+                    {% endif %}
                 </div>
                 {% empty %}
                 <p>No study sessions found.</p>
