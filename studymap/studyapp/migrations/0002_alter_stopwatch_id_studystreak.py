@@ -13,14 +13,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AlterField( # Update one of the fields in stopwatch
             model_name="stopwatch",
             name="id",
             field=models.BigAutoField(
                 auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
             ),
         ),
-        migrations.CreateModel(
+        migrations.CreateModel( #Creates table study streak
             name="StudyStreak",
             fields=[
                 (

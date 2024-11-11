@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Study Report</h1>
+    <p>Current Streak: {{ current_streak }} days</p>
+    <p>Longest Streak: {{ longest_streak }} days</p>
+    <p>Average Study Time per Day: {{ average_study_time|floatformat:2 }} seconds</p>
+
+    <h3>Daily Study Time Chart</h3>
+    <canvas id="studyTimeChart" width="400" height="200"></canvas>
+    <script>
+        var ctx = document.getElementById('studyTimeChart').getContext('2d');
+        var dailyStudyData = {
+            labels: {{ daily_study_times.keys|safe }},
+            datasets: [{
+                label: 'Total Study Time (seconds)',
+                data: {{ daily_study_times.values|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        var studyTimeChart = new Chart(ctx, {
+            type: 'bar',
+            data: dailyStudyData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -13,3 +13,11 @@ urlpatterns = [
     path('study-statistics/', study_statistics, name='study_statistics'),
 ]
 
+#####Study Streak Visualization
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('study-report/', views.study_report_view, name='study_report'),
+]
+###########

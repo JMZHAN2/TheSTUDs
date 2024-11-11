@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.AddField( # Adds a new column/field
             model_name="stopwatch",
             name="user",
             field=models.ForeignKey(
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             ),
             preserve_default=False,
         ),
-        migrations.DeleteModel(
+        migrations.DeleteModel( #Deletes table
             name="StudyStreak",
         ),
     ]

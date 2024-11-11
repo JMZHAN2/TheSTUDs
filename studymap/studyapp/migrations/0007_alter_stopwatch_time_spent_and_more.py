@@ -22,3 +22,6 @@ class Migration(migrations.Migration):
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]
+
+# Cd to project directory and run the following line to consolidate migration files and remove redundancies
+# python manage.py squashmigrations studyapp <first_migration> <last_migration>

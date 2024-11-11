@@ -12,6 +12,51 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 
+from datetime import timedelta
+from collections import defaultdict
+
+########## Study Streak Visualization
+def study_report_view(request):
+    user = request.user
+    # Get all study sessions for the logged-in user, ordered by start time
+    sessions = Stopwatch.objects.filter(user=user).order_by('time_start')
+    
+    # Calculate total study time per day
+    daily_study_times = defaultdict(int)
+    for session in sessions:
+        day = session.time_start.date()
+        daily_study_times[day] += session.time_spent
+
+    # Calculate the current streak and longest streak using the model method or directly here
+    current_streak = Stopwatch.calculate_study_streak(user)
+    longest_streak = 0
+    unique_dates = sorted(daily_study_times.keys(), reverse=True)
+
+    temp_streak = 0
+    last_date = None
+    for date in unique_dates:
+        if last_date is None or (last_date - date).days == 1:
+            temp_streak += 1
+            longest_streak = max(longest_streak, temp_streak)
+            last_date = date
+        else:
+            temp_streak = 1
+            last_date = date
+
+    # Calculate average study time per day
+    total_days = len(daily_study_times)
+    total_study_time = sum(daily_study_times.values())
+    average_study_time = total_study_time / total_days if total_days > 0 else 0
+
+    # Pass data to the template
+    context = {
+        'current_streak': current_streak,
+        'longest_streak': longest_streak,
+        'average_study_time': average_study_time,
+        'daily_study_times': dict(daily_study_times),
+    }
+    return render(request, 'study_report.html', context)
+##########
 
 def register(request):
     if request.method == 'POST':

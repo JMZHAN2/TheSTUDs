@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
             model_name="stopwatch",
             name="time_spent",
             field=models.IntegerField(default=django.utils.timezone.now),
+        # get time now
         ),
         migrations.AlterField(
             model_name="stopwatch",
