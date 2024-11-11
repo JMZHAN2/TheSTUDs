@@ -43,14 +43,14 @@ form div {
   margin-top: 2%; }
 
 /* Dashboard Container */
-.dashboard-container {
-  display: flex !important; }
-
+/*.dashboard-container {
+    display: flex !important;
+}*/
 /* Left Column */
-.dashboard-left {
-  flex: 1;
-  margin-right: 20px; }
-
+/*.dashboard-left {
+    flex: 1;
+    margin-right: 20px;
+}*/
 .loginTitle {
   color: 00C8A2;
   font-size: 38;
@@ -177,9 +177,43 @@ form div {
   flex: 0 0 300px;
   /* Added flex shorthand */ }
 
+.dashboardTitleDiv {
+  display: flex;
+  flex-direction: row;
+  gap: 1%; }
+
+.dashboardBigIcon {
+  border: 1px solid;
+  border-radius: 5px;
+  border-color: #00c8a2;
+  max-width: 400px;
+  max-height: 400px;
+  margin-left: 15%; }
+
+.streakNum {
+  color: #00c8a2;
+  font-family: 'Victor Mono';
+  font-size: 96px;
+  margin-bottom: 10px; }
+
+.streakSubtitle {
+  color: white;
+  font-family: 'Victor Mono';
+  font-size: 36px; }
+
+.dashboardImg {
+  height: 40px;
+  width: 40px;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(310deg) brightness(100%) contrast(103%); }
+
+.dashBoardTitle {
+  color: white;
+  font-family: 'Victor Mono'; }
+
 /* Study Sessions Container */
 .study-sessions-container {
   max-height: 500px;
+  max-width: 300px;
   /* Adjust the height as needed */
   overflow-y: auto;
   border: 1px solid #ccc;
@@ -204,13 +238,19 @@ form div {
 .study-sessions-container::-webkit-scrollbar-thumb:hover {
   background-color: #555; }
 
-@media (max-width: 768px) {
-  .dashboard-container {
-    flex-direction: column; }
-  .dashboard-left, .dashboard-right {
-    width: 100%;
-    margin-right: 0; }
-  .dashboard-right {
-    margin-top: 20px; } }
+/*@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .dashboard-left, .dashboard-right {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .dashboard-right {
+        margin-top: 20px;
+    }
+}*/
 
 /*# sourceMappingURL=styles.css.map */

@@ -14,18 +14,24 @@
 <body>
     <!-- Header -->
     <header>
-        <h1>
-            <b>StudyMap</b>
+        <h1 class="dashboardTitleDiv">
+            <img class="dashboardImg" src="../../static/media/logoIcon.svg" alt="studymap logo"></img>
+            <b class="dashboardTitle">welcome, {{ request.user.username }}</b>
         </h1>
-        <p class="tagline">Visualize your study habits!</p>
     </header>
 
     <!-- Dashboard Container -->
     <div class="dashboard-container">
+
+        <div class="dashboardBigIcon">
+            <p class="streakNum">{{ streak }}</p>
+            <p class="streakSubtitle">day streak</p>
+        </div>
+        
         <!-- Left Column -->
         <div class="dashboard-left">
             <!-- Dashboard Content -->
-            <h2>Welcome to your dashboard!</h2>
+            <!--<h2>Welcome to your dashboard!</h2>-->
             <p>You are logged in as {{ request.user.username }}</p>
 
             <!-- Action Buttons -->
