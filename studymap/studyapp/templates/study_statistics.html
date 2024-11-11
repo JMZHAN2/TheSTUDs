@@ -96,16 +96,16 @@
             <h2>Study Statistics</h2>
             <p>Viewing statistics for {{ request.user.username }}</p>
             <!-- Total and Average Study Time -->
-            <p><strong>Total Study Time:</strong> {{ total_time }}</p>
-            <p><strong>Average Session Time:</strong> {{ average_time }}</p>
+            <p><strong>Total Study Time:</strong> {{ total_time }} </p>
+            <p><strong>Average Session Time:</strong> {{ average_time }} </p>
             <!-- Back to Dashboard Button -->
             <div class="dashboard-buttons">
                 <a href="{% url 'dashboard' %}" class="nb-button blue">Back to Dashboard</a>
                 <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
             </div>
 
-            <!-- Detailed Study Sessions -->
-            <h3 style="margin-top: 30px;">Detailed Study Sessions</h3>
+            <!-- Study Sessions -->
+            <h3 style="margin-top: 30px;">Sessions</h3>
             <div class="study-sessions-container">
                 {% for session in study_sessions %}
                 <div class="study-session">
@@ -121,12 +121,14 @@
                     <br>
                     Date: {{ session.time_start|date:"F j, Y, g:i a" }}
                     <br>
+                    <!--
                     Coordinates:
                     {% if session.latitude and session.longitude %}
                         Latitude: {{ session.latitude|floatformat:6 }}, Longitude: {{ session.longitude|floatformat:6 }}
                     {% else %}
                         Location not available
-                    {% endif %}
+                    {% endif %} 
+                    -->
                 </div>
                 {% empty %}
                 <p>No study sessions found.</p>
@@ -135,7 +137,7 @@
         </div>
         <!-- Right Column (Heatmap) -->
         <div class="statistics-heatmap">
-            <h3>Study Sessions Heatmap</h3>
+            <h3>Heatmap</h3>
             <div id="heatmap"></div>
         </div>
     </div>
