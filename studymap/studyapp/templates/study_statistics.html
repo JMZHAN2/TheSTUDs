@@ -8,36 +8,108 @@
     <!-- CSS stylesheet -->
     <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
     <title>Study Statistics</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+
+    <style>
+        /* Styles for the heatmap container */
+        #heatmap {
+            height: 500px;
+            width: 100%;
+        }
+
+        .statistics-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* Left column: statistics and sessions */
+        .statistics-left {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            box-sizing: border-box;
+            /* Set width to approximately 33% */
+            flex-basis: 33%;
+            max-width: 33%;
+        }
+
+        /* Right column: heatmap */
+        .statistics-heatmap {
+            flex: 2;
+            min-width: 300px;
+            padding: 20px;
+            box-sizing: border-box;
+            /* Set width to approximately 66% */
+            flex-basis: 66%;
+            max-width: 66%;
+        }
+
+        /* Adjust layout for smaller screens */
+        @media (max-width: 767px) {
+            .statistics-left, .statistics-heatmap {
+                flex-basis: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Additional styling for the study sessions */
+        .study-sessions-container {
+            margin-top: 20px;
+        }
+
+        .study-session {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .dashboard-buttons {
+            margin-top: 20px;
+        }
+
+        .nb-button {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .nb-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1><b>StudyMap</b></h1>
-        <p class="tagline">Track and analyze your study patterns!</p>
-    </header>
     <!-- Statistics Container -->
     <div class="statistics-container">
         <!-- Left Column -->
         <div class="statistics-left">
+            <!-- Study Statistics -->
             <h2>Study Statistics</h2>
             <p>Viewing statistics for {{ request.user.username }}</p>
             <!-- Total and Average Study Time -->
-            <p><strong>Total Study Time:</strong> {{ total_time }} seconds</p>
-            <p><strong>Average Session Time:</strong> {{ average_time }} seconds</p>
+            <p><strong>Total Study Time:</strong> {{ total_time }}</p>
+            <p><strong>Average Session Time:</strong> {{ average_time }}</p>
             <!-- Back to Dashboard Button -->
             <div class="dashboard-buttons">
                 <a href="{% url 'dashboard' %}" class="nb-button blue">Back to Dashboard</a>
                 <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
             </div>
-        </div>
-        <!-- Right Column -->
-        <div class="statistics-right">
-            <h3>Detailed Study Sessions</h3>
+
+            <!-- Detailed Study Sessions -->
+            <h3 style="margin-top: 30px;">Detailed Study Sessions</h3>
             <div class="study-sessions-container">
                 {% for session in study_sessions %}
                 <div class="study-session">
-                    <strong>{{ session.title }}</strong>
-                    <br>
+                    <strong>{{ session.title }}</strong><br>
                     Time:
                     {% if session.get_duration.hours > 0 %}
                         {{ session.get_duration.hours }}h
@@ -47,7 +119,7 @@
                     {% endif %}
                     {{ session.get_duration.seconds }}s
                     <br>
-                    Date: {{ session.time_start }}
+                    Date: {{ session.time_start|date:"F j, Y, g:i a" }}
                     <br>
                     Coordinates:
                     {% if session.latitude and session.longitude %}
@@ -61,6 +133,22 @@
                 {% endfor %}
             </div>
         </div>
+        <!-- Right Column (Heatmap) -->
+        <div class="statistics-heatmap">
+            <h3>Study Sessions Heatmap</h3>
+            <div id="heatmap"></div>
+        </div>
     </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <!-- Heatmap Initialization Script -->
+    <script>
+        
+        
+    </script>
 </body>
 </html>
