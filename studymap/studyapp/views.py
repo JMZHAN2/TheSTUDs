@@ -10,6 +10,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+import json
 
 
 def register(request):
@@ -84,18 +85,34 @@ def start_study_session(request):
 def study_statistics(request):
     # Retrieve study sessions for the current user, sorted in reverse order to display recent first
     study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
+
     # Calculate total study time
     total_time = sum(session.time_spent for session in study_sessions)
+
     # Calculate average session time
     if study_sessions.exists():
         average_time = total_time / study_sessions.count()
     else:
         average_time = 0
+
+    # Prepare heatmap data
+    heatmap_data = []
+    for session in study_sessions:
+        if session.latitude and session.longitude:
+            # Optionally, you can weight the points by time_spent
+            # Leaflet heatmap expects data in the form [lat, lng, intensity]
+            intensity = session.time_spent  # Use time_spent as intensity
+            heatmap_data.append([float(session.latitude), float(session.longitude), intensity])
+
+    # Convert heatmap_data to JSON
+    heatmap_data_json = json.dumps(heatmap_data)
+
     # Pass data to the template
     context = {
         'study_sessions': study_sessions,
         'total_time': total_time,
         'average_time': average_time,
+        'heatmap_data': heatmap_data_json,
     }
     return render(request, 'study_statistics.html', context)
 

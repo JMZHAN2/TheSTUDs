@@ -144,11 +144,48 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
-
+    
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    
     <!-- Heatmap Initialization Script -->
     <script>
-        
-        
+        // Data passed from Django view
+        var heatmapData = {{ heatmap_data|safe }};
+
+        // Initialize the map
+        var map = L.map('heatmap').setView([0, 0], 2); // Default to world view
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Check if there is any data
+        if (heatmapData.length > 0) {
+            // Adjust the map view to the bounds of the data
+            var latLngs = heatmapData.map(function (point) {
+                return [point[0], point[1]];
+            });
+            var bounds = L.latLngBounds(latLngs);
+            map.fitBounds(bounds);
+
+            // Create the heatmap layer
+            var heat = L.heatLayer(heatmapData, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 17,
+                // You can adjust other options here
+            }).addTo(map);
+        } else {
+            // If no data, display a message
+            map.setView([0, 0], 2);
+            L.popup()
+                .setLatLng([0, 0])
+                .setContent("No location data available for heatmap.")
+                .openOn(map);
+        }
     </script>
+
 </body>
 </html>
