@@ -1,102 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Required meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Timer</title>
 
-    <title>Stopwatch</title>
+    <!-- Load SASS tags and include the SCSS stylesheet -->
+    {% load sass_tags %}
+    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
 
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
-
     <style>
+        /* Base styles */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             background-color: #f4f4f4;
+            margin: 0;
         }
+
         h1 {
             color: #333;
-        }
-        .stopwatch {
-            font-size: 24px;
-            font-weight: bold;
-            color: #8b00fd;
-        }
-        button {
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-            padding: 5px 10px;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            border-radius: 12px;
-            border: 2px solid #8b00fd;
+            margin-top: 20px;
         }
+
+        /* Container for the two columns */
+        .timer-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        /* Left column styles */
+        .timer-left {
+            flex: 1;
+            min-width: 300px;
+            max-width: 33%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        /* Right column styles */
+        .timer-right {
+            flex: 2;
+            min-width: 300px;
+            max-width: 66%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        /* Adjust layout for smaller screens */
+        @media (max-width: 767px) {
+            .timer-left, .timer-right {
+                flex-basis: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Timer styles */
         #timer {
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            margin: 20px auto;
-            max-width: 300px;
+            margin-bottom: 20px;
+            text-align: center;
         }
+
+        .stopwatch {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Form styles */
+        .session-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .session-form input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .session-form button {
+            margin-top: 10px;
+        }
+
+        /* Map styles */
         #map {
-            height: 400px;
-            width: 90%;
-            margin: 20px auto;
+            height: 500px;
+            width: 100%;
             border-radius: 5px;
         }
+
+        /* Error message styles */
         .zero-second-error {
-        color: red;
-        font-weight: bold;
-        
-        
-        padding: 10px;
-        margin: 10px 0; 
-        border-radius: 5px; 
-}
+            color: red;
+            font-weight: bold;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
     </style>
 </head>
-
 <body>
     <h1>Study Timer</h1>
-    <div id="timer">
-        <h2>Time Spent:</h2>
-        <div class="stopwatch">
-            <span id="time">00:00:00</span>
+    <div class="timer-container">
+        <!-- Left Column -->
+        <div class="timer-left">
+            <!-- Timer -->
+            <div id="timer">
+                <h2>Time Spent:</h2>
+                <div class="stopwatch">
+                    <span id="time">00:00:00</span>
+                </div>
+                <button id="start-btn" class="nb-button blue">Start</button>
+                <button id="stop-btn" class="nb-button blue" disabled>Stop</button>
+            </div>
+
+            <!-- Form -->
+            <div class="session-form">
+                <form method="POST" action="{% url 'finish_session' %}" id="finish-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="stopwatch_id" value="{{ stopwatch.id }}">
+                    <input type="hidden" name="time_spent" id="time-spent" value="0">
+                    <input type="hidden" name="latitude" id="latitude" value="0">
+                    <input type="hidden" name="longitude" id="longitude" value="0">
+
+                    <label for="session-title">Session Title:</label>
+                    <input type="text" id="session-title" name="session_title" required>
+                    <button type="submit" id="finish-btn" class="nb-button blue">Finish Session</button>
+                </form>
+                <p>You are logged in as {{ request.user.username }}</p>
+            </div>
+
+            <!-- Error message (if any) -->
+            {% if error_message %}
+            <div class="zero-second-error">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <!-- Dashboard Buttons -->
+            <div class="dashboard-buttons">
+                <a href="{% url 'dashboard' %}" class="nb-button blue">Back to Dashboard</a>
+                <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
+            </div>
         </div>
-        <button id="start-btn">Start</button>
-        <button id="stop-btn" disabled>Stop</button>
-    </div>
-   
-    <div>
-        <form method="POST" action="{% url 'finish_session' %}" id="finish-form">
-            {% csrf_token %}
-            <input type="hidden" name="stopwatch_id" value="{{ stopwatch.id }}">
-            <input type="hidden" name="time_spent" id="time-spent" value="0">
-            <input type="hidden" name="latitude" id="latitude" value="0">
-            <input type="hidden" name="longitude" id="longitude" value="0">
 
-            <label for="session-title">Session Title:</label>
-            <input type="text" id="session-title" name="session_title" required>
-            <button type="submit" id="finish-btn">Finish Session</button>
-            <p>You are logged in as {{ request.user.username }}</p>
-            
-        </form>
+        <!-- Right Column (Map) -->
+        <div class="timer-right">
+            <div id="map"></div>
+        </div>
     </div>
-    {% if error_message %}
-    <div class="zero-second-error">
-        {{ error_message }}
-    </div>
-    {% endif %}
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <!-- JavaScript code -->
     <script>
         let timer;
         let seconds = 0, minutes = 0, hours = 0;
@@ -137,17 +216,14 @@
             document.getElementById('start-btn').disabled = false;
             document.getElementById('stop-btn').disabled = true;
         });
+
         document.getElementById('finish-btn').addEventListener('click', (event) => {
             stopStopwatch();
             const totalTimeSpent = hours * 3600 + minutes * 60 + seconds;
             document.getElementById('time-spent').value = totalTimeSpent;
         });
-    </script>
 
-    <div id="locationStatus" style="margin-top: 20px; font-size: 16px; color: #555;"></div>
-    <div id="map"></div>
-
-    <script>
+        // Geolocation and Map
         const locationStatus = document.getElementById("locationStatus");
 
         function getLocation() {
@@ -164,23 +240,22 @@
             document.getElementById('latitude').value = latitude;
             document.getElementById('longitude').value = longitude;
 
-            locationStatus.innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
-
+            // Initialize the map
             const map = L.map('map').setView([latitude, longitude], 13);
 
-            // Investigate: warns that functions are unresovled
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
+            // Add a marker
             L.marker([latitude, longitude]).addTo(map)
                 .bindPopup("You are here.")
                 .openPopup();
         }
 
         function showError(error) {
-            error.UNKNOWN_ERROR = undefined;
             switch (error.code) {
                 case error.PERMISSION_DENIED:
                     locationStatus.innerHTML = "User denied the request for Geolocation.";
@@ -192,6 +267,7 @@
                     locationStatus.innerHTML = "The request to get user location timed out.";
                     break;
                 case error.UNKNOWN_ERROR:
+                default:
                     locationStatus.innerHTML = "An unknown error occurred.";
                     break;
             }

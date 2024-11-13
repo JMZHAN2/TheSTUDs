@@ -14,4 +14,3 @@ urlpatterns = [
     path('study-report/', views.study_report_view, name='study_report'),
 
 ]
-

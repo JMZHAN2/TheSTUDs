@@ -11,9 +11,9 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
-
 from datetime import timedelta
 from collections import defaultdict
+
 
 ########## Study Streak Visualization
 def study_report_view(request):
@@ -56,7 +56,7 @@ def study_report_view(request):
         'daily_study_times': dict(daily_study_times),
     }
     return render(request, 'study_report.html', context)
-##########
+
 
 def register(request):
     if request.method == 'POST':
@@ -128,8 +128,20 @@ def start_study_session(request):
 
 @login_required
 def study_statistics(request):
-    # Retrieve study sessions for the current user, sorted in reverse order to display recent first
-    study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
+    # Get the timeframe parameter from the request (default to 'all')
+    timeframe = request.GET.get('timeframe', 'all')
+
+    # Calculate start_date for the past month
+    start_date = timezone.now() - timedelta(days=30)
+
+    # Retrieve study sessions based on the timeframe
+    if timeframe == 'month':
+        study_sessions = Stopwatch.objects.filter(
+            user=request.user,
+            time_start__gte=start_date
+        ).order_by('-time_start')
+    else:
+        study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
 
     # Calculate total study time
     total_time = sum(session.time_spent for session in study_sessions)
@@ -141,23 +153,37 @@ def study_statistics(request):
         average_time = 0
 
     # Prepare heatmap data
-    heatmap_data = []
-    for session in study_sessions:
+    # All-time data
+    all_sessions = Stopwatch.objects.filter(user=request.user)
+    all_time_heatmap_data = []
+    for session in all_sessions:
         if session.latitude and session.longitude:
-            # Optionally, you can weight the points by time_spent
-            # Leaflet heatmap expects data in the form [lat, lng, intensity]
-            intensity = session.time_spent  # Use time_spent as intensity
-            heatmap_data.append([float(session.latitude), float(session.longitude), intensity])
+            intensity = session.time_spent
+            all_time_heatmap_data.append([float(session.latitude), float(session.longitude), intensity])
 
-    # Convert heatmap_data to JSON
-    heatmap_data_json = json.dumps(heatmap_data)
+    # Monthly data
+    monthly_sessions = Stopwatch.objects.filter(
+        user=request.user,
+        time_start__gte=start_date
+    )
+    monthly_heatmap_data = []
+    for session in monthly_sessions:
+        if session.latitude and session.longitude:
+            intensity = session.time_spent
+            monthly_heatmap_data.append([float(session.latitude), float(session.longitude), intensity])
+
+    # Convert heatmap data to JSON
+    all_time_heatmap_data_json = json.dumps(all_time_heatmap_data)
+    monthly_heatmap_data_json = json.dumps(monthly_heatmap_data)
 
     # Pass data to the template
     context = {
         'study_sessions': study_sessions,
-        'total_time': total_time,
-        'average_time': average_time,
-        'heatmap_data': heatmap_data_json,
+        'total_time': int(total_time),
+        'average_time': int(average_time),
+        'all_time_heatmap_data': all_time_heatmap_data_json,
+        'monthly_heatmap_data': monthly_heatmap_data_json,
+        'timeframe': timeframe,
     }
     return render(request, 'study_statistics.html', context)
 
