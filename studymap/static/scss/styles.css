@@ -1,6 +1,14 @@
 @import 'https://unpkg.com/neobrutalismcss@latest';
+@font-face {
+  font-family: 'Victor Mono';
+  src: url("./VictorMonoAll/TTF/VictorMono-Regular.ttf"); }
+
 body {
-  background-color: #f0f0f0; }
+  background-color: #231942; }
+
+.dashboardTitle {
+  color: white;
+  font-family: "Victor Mono"; }
 
 form {
   max-width: 300px;

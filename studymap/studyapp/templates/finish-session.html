@@ -6,25 +6,81 @@
 <head>
     
     <meta charset="UTF-8">
-    <title>Good Work!</title>
+    <title>good work, {{ request.user.username }}!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
    
     <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
+
+    <style>
+        .successDiv {
+            display: flex;
+            flex-direction: row;
+            gap: 1%;
+            margin-top: 2%;
+            margin-left: 5%;
+            margin-bottom: 1%;
+        }
+
+        .Title {
+            color: rgba(0, 200, 162, 1);
+            font-family: "Victor Mono";
+        }
+
+        .success-message {
+            color: white;
+            font-family: "Victor Mono";
+            margin-left: 10%;
+            margin-bottom: 3%;
+        }
+
+        .dashboardBtn {
+            color: white;
+            text-decoration: none;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 3px;
+            font-family: 'Victor Mono';
+            font-size: 18px;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .timersBtn {
+            color: white;
+            text-decoration: none;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 3px;
+            font-family: 'Victor Mono';
+            font-size: 18px;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .action-buttons {
+            margin-bottom: 3%;
+            margin-left: 10%;
+        }
+    </style>
 </head>
 
 <body>
  
     <header>
-        <h1>
-            <b>StudyMap</b>
+        <h1 class="successDiv">
+            <img class="dashboardLogo" src="../../static/scss/media/logoIcon.svg"></img>
+            <b class="Title">studymap</b>
         </h1>
-        <p class="tagline">Visualize your study habits!</p>
     </header>
 
     <!-- Display success message -->
     <div class="success-message">
-        Good work! You studied for:
+        good work, {{ request.user.username }}! you studied for:
         {% if hours > 0 %}{{ hours }} hours{% endif %}
         {% if minutes > 0 %} {{ minutes }} minutes{% endif %}
         {% if seconds > 0 %} {{ seconds }} seconds{% endif %}.
@@ -34,8 +90,8 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-        <a href="{% url 'dashboard' %}" class="nb-button blue">Go to Dashboard</a>
-        <a href="{% url 'study_timer' %}" class="nb-button blue">Back to Timer</a>
+        <a href="{% url 'dashboard' %}" class="dashboardBtn">back to dashboard</a>
+        <a href="{% url 'study_timer' %}" class="timersBtn">back to timer</a>
     </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 {% load static %}
 {% load sass_tags %}
+{% load duration_filters %}
 
 <html>
 <head>
@@ -8,40 +9,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- CSS stylesheet -->
-    <link rel="stylesheet" href="{% sass_src 'scss/styles.scss' %}"/>
+    <link rel="stylesheet" href="{% sass_src 'scss/dashboard.scss' %}"/>
 </head>
 
 <body>
     <!-- Header -->
     <header>
-        <h1>
-            <b>StudyMap</b>
+        <h1 class="dashboardTitleDiv">
+            <img class="dashboardLogo" src="../../static/scss/media/logoIcon.svg"></img>
+            <b class="dashboardTitle">studymap</b>
+            <img class="dashboardLine" src="../../static/scss/media/line.svg"></img>
         </h1>
-        <p class="tagline">Visualize your study habits!</p>
     </header>
 
+    <h2 class="welcomeMsg">//welcome to your dashboard, {{ request.user.username }}</h2>
     <!-- Dashboard Container -->
     <div class="dashboard-container">
         <!-- Left Column -->
         <div class="dashboard-left">
             <!-- Dashboard Content -->
-            <h2>Welcome to your dashboard!</h2>
-            <p>You are logged in as {{ request.user.username }}</p>
 
-            <!-- Action Buttons -->
-            <div class="dashboard-buttons">
-                <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
-                <a href="{% url 'study_timer' %}" class="nb-button blue">Study Timer</a>
-                <a href="{% url 'study_statistics' %}" class="nb-button blue">View Study Statistics</a>
+            <div class="dashboardBigIcon">
+                <p class="streakNum">{{ streak }}</p>
+                <p class="streakSubtitle">day streak</p>
             </div>
 
+            <!-- Action Buttons -->
+            <!--<div class="dashboard-buttons">
+                <a href="{% url 'logout' %}" class="nb-button blue">logout</a>
+                <a href="{% url 'study_timer' %}" class="nb-button blue">study timer</a>
+                <a href="{% url 'study_statistics' %}" class="nb-button blue">view study statistics</a>
+            </div>-->
+
             <!-- Study Streak -->
-            <p>Your current study streak: {{ streak }} days 🔥</p>
+        </div>
+
+        <div class="dashboard-middle">
+            <div class="dashAvStat">
+                <!--<p class="avNum">{{ average_time|duration_format }}</p>-->
+                <p class="avNum">0</p>
+                <p class="avTitle">average session</p>
+            </div>
+
+            <div class="dashTotalStat">
+                <!--<p class="totalNum">{{ total_time|duration_format }}</p>-->
+                <p class="totalNum">0</p>
+                <p class="totalTitle">total study time</p>
+            </div>
         </div>
 
         <!-- Right Column -->
         <div class="dashboard-right">
-            <h3>Your Study Sessions</h3>
             <div class="study-sessions-container">
                 {% for session in study_sessions %}
                 <div class="study-session">
@@ -59,7 +77,18 @@
                 <p>No study sessions found.</p>
                 {% endfor %}
             </div>
+            <h3 class="dashSSTitle">recent study sessions</h3>
         </div>
+    </div>
+
+    <div class="accordianDiv">
+        <img class="dashboardLine2" src="../../static/scss/media/line2.svg"></img>
+        <a href="{% url 'study_timer' %}" class="timersBtn">//start a new study session</a>
+        <img class="dashboardLine2" src="../../static/scss/media/line2.svg"></img>
+        <a href="{% url 'study_statistics' %}" class="statsBtn">//view your study statistics</a>
+        <img class="dashboardLine2" src="../../static/scss/media/line2.svg"></img>
+        <a href="{% url 'logout' %}" class="logOff">//logout</a>
+        <img class="dashboardLine2" src="../../static/scss/media/line2.svg"></img>
     </div>
 </body>
 </html>
