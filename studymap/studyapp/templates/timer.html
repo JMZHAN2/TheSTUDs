@@ -93,7 +93,7 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         .session-form label {
@@ -208,6 +208,13 @@
             padding-left: 10px;
             padding-right: 10px;
         }
+
+        .userMessage {
+            color: white;
+            font-family: "Victor Mono";
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
@@ -239,6 +246,8 @@
                     <button type="submit" id="finish-btn" class="finishBtn">finish session</button>
                 </form>
             </div>
+
+            <p class="userMessage">*note: only sessions over 10 minutes count towards your study streak</p>
 
             <!-- Error message (if any) -->
             {% if error_message %}
