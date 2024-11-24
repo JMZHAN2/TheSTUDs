@@ -3,16 +3,14 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib import messages
 from .forms import UserRegistrationForm
-from . models import Stopwatch
-from datetime import datetime
+from .models import Stopwatch
+from datetime import datetime, timedelta
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-import json
-from datetime import timedelta
 from collections import defaultdict
+import json
 
 
 ########## Study Streak Visualization
@@ -20,14 +18,14 @@ def study_report_view(request):
     user = request.user
     # Get all study sessions for the logged-in user, ordered by start time
     sessions = Stopwatch.objects.filter(user=user).order_by('time_start')
-    
+
     # Calculate total study time per day
     daily_study_times = defaultdict(int)
     for session in sessions:
         day = session.time_start.date()
         daily_study_times[day] += session.time_spent
 
-    # Calculate the current streak and longest streak using the model method or directly here
+    # Calculate the current streak and longest streak
     current_streak = Stopwatch.calculate_study_streak(user)
     longest_streak = 0
     unique_dates = sorted(daily_study_times.keys(), reverse=True)
@@ -92,10 +90,8 @@ def logout_view(request):
     return redirect('login')
 
 
+@login_required
 def dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-
     study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')[:5]
     streak = Stopwatch.calculate_study_streak(request.user)
 
@@ -109,32 +105,28 @@ def dashboard(request):
 @login_required
 def study_time(request):
     user_stopwatches = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
-    
-    if not user_stopwatches.exists():
-        stopwatch = Stopwatch.objects.create(user=request.user, title="Study Session")
-    else:
-        stopwatch = user_stopwatches.first()  
-    
+
+    # Do not create a stopwatch automatically
+    stopwatch = user_stopwatches.first() if user_stopwatches.exists() else None
+
     return render(request, "timer.html", {"stopwatch": stopwatch, "all_stopwatches": user_stopwatches})
 
 
 @login_required
 def start_study_session(request):
     if request.method == 'POST':
-        title = request.POST.get('title') 
+        title = request.POST.get('title', 'Study Session')
         stopwatch = Stopwatch(user=request.user, title=title)
         stopwatch.save()
         return redirect('dashboard')
+    return redirect('study_time')
+
 
 @login_required
 def study_statistics(request):
-    # Get the timeframe parameter from the request (default to 'all')
     timeframe = request.GET.get('timeframe', 'all')
-
-    # Calculate start_date for the past month
     start_date = timezone.now() - timedelta(days=30)
 
-    # Retrieve study sessions based on the timeframe
     if timeframe == 'month':
         study_sessions = Stopwatch.objects.filter(
             user=request.user,
@@ -143,46 +135,27 @@ def study_statistics(request):
     else:
         study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')
 
-    # Calculate total study time
     total_time = sum(session.time_spent for session in study_sessions)
+    average_time = total_time / study_sessions.count() if study_sessions.exists() else 0
 
-    # Calculate average session time
-    if study_sessions.exists():
-        average_time = total_time / study_sessions.count()
-    else:
-        average_time = 0
-
-    # Prepare heatmap data
-    # All-time data
     all_sessions = Stopwatch.objects.filter(user=request.user)
-    all_time_heatmap_data = []
-    for session in all_sessions:
-        if session.latitude and session.longitude:
-            intensity = session.time_spent
-            all_time_heatmap_data.append([float(session.latitude), float(session.longitude), intensity])
+    all_time_heatmap_data = [
+        [float(session.latitude), float(session.longitude), session.time_spent]
+        for session in all_sessions if session.latitude and session.longitude
+    ]
 
-    # Monthly data
-    monthly_sessions = Stopwatch.objects.filter(
-        user=request.user,
-        time_start__gte=start_date
-    )
-    monthly_heatmap_data = []
-    for session in monthly_sessions:
-        if session.latitude and session.longitude:
-            intensity = session.time_spent
-            monthly_heatmap_data.append([float(session.latitude), float(session.longitude), intensity])
+    monthly_sessions = Stopwatch.objects.filter(user=request.user, time_start__gte=start_date)
+    monthly_heatmap_data = [
+        [float(session.latitude), float(session.longitude), session.time_spent]
+        for session in monthly_sessions if session.latitude and session.longitude
+    ]
 
-    # Convert heatmap data to JSON
-    all_time_heatmap_data_json = json.dumps(all_time_heatmap_data)
-    monthly_heatmap_data_json = json.dumps(monthly_heatmap_data)
-
-    # Pass data to the template
     context = {
         'study_sessions': study_sessions,
         'total_time': int(total_time),
         'average_time': int(average_time),
-        'all_time_heatmap_data': all_time_heatmap_data_json,
-        'monthly_heatmap_data': monthly_heatmap_data_json,
+        'all_time_heatmap_data': json.dumps(all_time_heatmap_data),
+        'monthly_heatmap_data': json.dumps(monthly_heatmap_data),
         'timeframe': timeframe,
     }
     return render(request, 'study_statistics.html', context)
@@ -191,59 +164,41 @@ def study_statistics(request):
 @login_required
 def finish_session(request):
     if request.method == "POST":
-        stopwatch_id = request.POST.get("stopwatch_id")
-
         try:
             time_spent = int(request.POST.get("time_spent", 0))
-        except ValueError:
-            time_spent = 0
+            latitude_ = float(request.POST.get("latitude", 0)) if request.POST.get("latitude") else None
+            longitude_ = float(request.POST.get("longitude", 0)) if request.POST.get("longitude") else None
+            session_title = request.POST.get("session_title", "Study Session").strip()
 
-        # Convert latitude and longitude before passing
-        try:
-            latitude_ = float(request.POST.get("latitude"))
-        except (TypeError, ValueError):
-            latitude_ = None
-        try:
-            longitude_ = float(request.POST.get("longitude"))
-        except (TypeError, ValueError):
-            longitude_ = None
+            if time_spent <= 0:
+                error_message = "Cannot save a session 0 seconds long."
+                return render(request, "timer.html", {
+                    "error_message": error_message,
+                    "latitude": latitude_,
+                    "longitude": longitude_,
+                    "session_title": session_title,
+                })
 
-        session_title = request.POST.get("session_title", "Study Session").strip()
+            stopwatch = Stopwatch.objects.create(
+                user=request.user,
+                time_spent=time_spent,
+                title=session_title,
+                latitude=latitude_,
+                longitude=longitude_,
+            )
 
-        if time_spent <= 0:
-            # Redirect to the timer page with an error message
-            error_message = "Cannot save a session 0 seconds long"
-            return render(request, "timer.html", {
-                "error_message": error_message,
-                "latitude": latitude_,
-                "longitude": longitude_,
-                "session_title": session_title,
+            hours = stopwatch.time_spent // 3600
+            minutes = (stopwatch.time_spent % 3600) // 60
+            seconds = stopwatch.time_spent % 60
+
+            return render(request, "finish-session.html", {
+                "time_spent": stopwatch.get_duration(),
+                "hours": hours,
+                "minutes": minutes,
+                "seconds": seconds,
             })
+        except ValueError:
+            messages.error(request, "Invalid session data.")
+            return redirect('study_time')
 
-        # Create a new Stopwatch instance for each session
-        stopwatch = Stopwatch.objects.create(
-            user=request.user,
-            time_spent=int(time_spent),
-            title= session_title,  
-            latitude = float(latitude_),
-            longitude = float(longitude_),
-
-        )
-
-        # Calculate hours, minutes, and seconds for the success message
-        hours = stopwatch.time_spent // 3600
-        minutes = (stopwatch.time_spent % 3600) // 60
-        seconds = stopwatch.time_spent % 60
-
-        return render(request, "finish-session.html", {
-            "time_spent": stopwatch.get_duration(),
-            "hours": hours,
-            "minutes": minutes,
-            "seconds": seconds
-        })
-    
-    # Handle cases where the method is not POST
     return render(request, "finish-session.html")
-
-
-
