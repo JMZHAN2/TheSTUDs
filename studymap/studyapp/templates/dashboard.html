@@ -16,44 +16,34 @@
     <!-- Header -->
     <header>
         <h1 class="dashboardTitleDiv">
-            <img class="dashboardLogo" src="../../static/scss/media/logoIcon.svg"></img>
+            <img class="dashboardLogo" src="{% static 'scss/media/logoIcon.svg' %}">
             <b class="dashboardTitle">studymap</b>
-            <img class="dashboardLine" src="../../static/scss/media/line.svg"></img>
+            <img class="dashboardLine" src="{% static 'scss/media/line.svg' %}">
         </h1>
     </header>
 
     <h2 class="welcomeMsg">//welcome to your dashboard, {{ request.user.username }}</h2>
+
     <!-- Dashboard Container -->
     <div class="dashboard-container">
         <!-- Left Column -->
         <div class="dashboard-left">
-            <!-- Dashboard Content -->
-
+            <!-- Day Streak -->
             <div class="dashboardBigIcon">
                 <p class="streakNum">{{ streak }}</p>
                 <p class="streakSubtitle">day streak</p>
             </div>
-
-            <!-- Action Buttons -->
-            <!--<div class="dashboard-buttons">
-                <a href="{% url 'logout' %}" class="nb-button blue">logout</a>
-                <a href="{% url 'study_timer' %}" class="nb-button blue">study timer</a>
-                <a href="{% url 'study_statistics' %}" class="nb-button blue">view study statistics</a>
-            </div>-->
-
-            <!-- Study Streak -->
         </div>
 
+        <!-- Middle Column -->
         <div class="dashboard-middle">
             <div class="dashAvStat">
-                <!--<p class="avNum">{{ average_time|duration_format }}</p>-->
-                <p class="avNum">0</p>
+                <p class="avNum">{{ average_time|duration_format }}</p>
                 <p class="avTitle">average session</p>
             </div>
 
             <div class="dashTotalStat">
-                <!--<p class="totalNum">{{ total_time|duration_format }}</p>-->
-                <p class="totalNum">0</p>
+                <p class="totalNum">{{ total_time|duration_format }}</p>
                 <p class="totalTitle">total study time</p>
             </div>
         </div>

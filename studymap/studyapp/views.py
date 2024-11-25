@@ -92,12 +92,26 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
+    # Fetch the recent 5 study sessions for the user
     study_sessions = Stopwatch.objects.filter(user=request.user).order_by('-time_start')[:5]
+
+    # Fetch all study sessions for the user to calculate total and average time
+    all_study_sessions = Stopwatch.objects.filter(user=request.user)
+
+    # Calculate total study time in seconds
+    total_time = sum(session.time_spent for session in all_study_sessions)
+
+    # Calculate average session time in seconds
+    average_time = total_time / all_study_sessions.count() if all_study_sessions.exists() else 0
+
+    # Calculate the study streak
     streak = Stopwatch.calculate_study_streak(request.user)
 
     context = {
         'study_sessions': study_sessions,
         'streak': streak,
+        'total_time': int(total_time),
+        'average_time': int(average_time),
     }
     return render(request, 'dashboard.html', context)
 
