@@ -1,0 +1,178 @@
+@import 'https://unpkg.com/neobrutalismcss@latest';
+@font-face {
+  font-family: 'Victor Mono';
+  src: url("./VictorMonoAll/TTF/VictorMono-Regular.ttf"); }
+
+body {
+  background-color: #231942; }
+
+.dashboardTitleDiv {
+  display: flex;
+  flex-direction: row;
+  gap: 1%;
+  margin-top: 2%;
+  margin-left: 5%;
+  margin-bottom: 3%; }
+
+.dashboardTitle {
+  color: #00c8a2;
+  font-family: "Victor Mono";
+  font-size: 50px; }
+
+.welcomeMsg {
+  color: white;
+  font-family: "Victor Mono";
+  font-style: italic;
+  margin-left: 10.5%;
+  margin-bottom: 6%; }
+
+.dashboardBigIcon {
+  border: 3px solid;
+  border-radius: 3px;
+  border-color: #00c8a2;
+  width: 400px;
+  height: 400px;
+  text-align: center;
+  margin-left: 13%; }
+
+.streakNum {
+  color: #00c8a2;
+  font-family: 'Victor Mono';
+  font-size: 96px;
+  margin-bottom: 5px; }
+
+.streakSubtitle {
+  color: white;
+  font-family: 'Victor Mono';
+  font-size: 30px; }
+
+.dashSSTitle {
+  color: white;
+  font-family: "Victor Mono"; }
+
+form {
+  max-width: 300px;
+  /* Adjust the width as needed */ }
+
+/* Style the divs containing the inputs and button */
+form div {
+  margin-bottom: 15px;
+  /* Adds space between elements */ }
+
+/* Dashboard Container */
+.dashboard-container {
+  display: flex;
+  flex-direction: row;
+  gap: 170px;
+  margin-left: 7%;
+  margin-bottom: 5%; }
+
+/* Left Column */
+.dashboard-left {
+  margin-right: -45px; }
+
+.dashboard-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; }
+
+.dashAvStat {
+  border: 3px solid #00c8a2;
+  border-radius: 3px;
+  padding: 6px;
+  text-align: center;
+  height: 190px;
+  width: 190px; }
+
+.avNum {
+  color: #00c8a2;
+  font-family: "Victor Mono";
+  font-size: 36px; }
+
+.avTitle {
+  color: white;
+  font-family: "Victor Mono"; }
+
+.dashTotalStat {
+  border: 3px solid #00c8a2;
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+  height: 190px;
+  width: 190px; }
+
+.totalNum {
+  color: #00c8a2;
+  font-family: "Victor Mono";
+  font-size: 36px; }
+
+.totalTitle {
+  color: white;
+  font-family: "Victor Mono"; }
+
+/* Right Column */
+.dashboard-right {
+  flex: 0 0 300px;
+  /* Added flex shorthand */ }
+
+/* Study Sessions Container */
+.study-sessions-container {
+  max-height: 500px;
+  /* Adjust the height as needed */
+  overflow-y: auto;
+  border: 3px solid #00c8a2;
+  padding: 3px;
+  border-radius: 3px; }
+
+/* Individual Study Session */
+.study-session {
+  background-color: #231942;
+  padding: 10px;
+  border: 1px solid #00c8a2;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  color: white;
+  font-family: "Victor Mono"; }
+
+/* Optional: Scrollbar Styling */
+.study-sessions-container::-webkit-scrollbar {
+  width: 8px; }
+
+.study-sessions-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px; }
+
+.study-sessions-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555; }
+
+.accordianDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; }
+
+.dashboardLine2 {
+  width: 79.5%;
+  margin-left: 10.5%; }
+
+.timersBtn {
+  color: white;
+  font-family: "Victor Mono";
+  font-size: 26px;
+  margin-left: 13%;
+  text-decoration: none; }
+
+.statsBtn {
+  color: white;
+  font-family: "Victor Mono";
+  font-size: 26px;
+  margin-left: 13%;
+  text-decoration: none; }
+
+.logOff {
+  color: white;
+  font-family: "Victor Mono";
+  font-size: 26px;
+  margin-left: 13%;
+  text-decoration: none; }
+
+/*# sourceMappingURL=dashboard.css.map */

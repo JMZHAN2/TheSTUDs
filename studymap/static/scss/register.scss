@@ -1,0 +1,87 @@
+@import 'https://unpkg.com/neobrutalismcss@latest';
+
+@font-face {
+    font-family: 'Victor Mono';
+    src: url('./VictorMonoAll/TTF/VictorMono-Regular.ttf');
+}
+
+body {
+    background-color: rgba(35, 25, 66, 1);
+    // Add your custom styles here
+}
+
+form {
+    margin-top: 50px;
+    max-width: 500px; /* Adjust the width as needed */
+    //margin: 0 auto;   /* Centers the form horizontally */
+    margin-bottom: 3%;
+}
+
+/* Style the divs containing the inputs and button */
+form div {
+    margin-bottom: 40px; /* Adds space between elements */
+}
+
+.nb-input {
+    color: white !important;
+    background-color: 231942 !important; 
+    font-family: 'Victor Mono' !important;
+    border-color: 00C8A2 !important;
+    margin-left: 105% !important;
+    margin-right: auto !important;
+    border-radius: 5px !important;
+    border-width: 1px !important;
+    width: 414px !important;
+}
+
+.nb-button {
+    background-color: 00C8A2 !important;
+    font-family: 'Victor Mono' !important;
+    text-transform: lowercase !important;
+    border-color: 00C8A2 !important;
+    border-radius: 5px !important;
+    margin-left: 119% !important;
+    margin-right: auto !important;
+    width: 272px !important;
+}
+
+.logoImg {
+    margin-left: -5%;
+    margin-top: 2%;
+}
+.loginTitle {
+    color: 00C8A2;
+    font-size: 38;
+    font-family: 'Victor Mono';
+    padding-top: 16px;
+}
+
+.loginTitleDiv {
+    margin-left: 45%;
+    margin-right: auto;
+    margin-top: 2%;
+    margin-bottom: 7%;
+    display: flex !important;
+    flex-direction: row;
+    gap: 2%;
+}
+
+.signUpText {
+    color: white;
+    font-family: 'Victor Mono';
+    margin-left: 44%;
+    margin-right: auto;
+}
+
+.signUpTextLink {
+    color: white;
+    font-family: 'Victor Mono';
+}
+
+.tagline {
+    color: white;
+    font-family: 'Victor Mono';
+    font-size: 24px;
+    margin-left: 36.75%;
+    margin-right: auto;
+}

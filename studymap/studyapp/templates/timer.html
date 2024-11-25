@@ -4,7 +4,7 @@
     <!-- Required meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Timer</title>
+    <title>study timer</title>
 
     <!-- Load SASS tags and include the SCSS stylesheet -->
     {% load sass_tags %}
@@ -17,15 +17,21 @@
 
     <style>
         /* Base styles */
+        @font-face {
+            font-family: 'Victor Mono';
+            src: url('./VictorMonoAll/TTF/VictorMono-Regular.ttf');
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: "Victor Mono";
+            background-color: rgba(35, 25, 66, 1);
             margin: 0;
         }
 
         h1 {
-            color: #333;
-            text-align: center;
+            color: white;
+            text-align: left;
+            margin-left: 40px;
             margin-top: 20px;
         }
 
@@ -64,7 +70,8 @@
 
         /* Timer styles */
         #timer {
-            background-color: #fff;
+            background-color: rgba(35, 25, 66, 1);
+            border: 3px solid rgba(0, 200, 162, 1);
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -73,21 +80,26 @@
         }
 
         .stopwatch {
-            font-size: 24px;
+            color: rgba(0, 200, 162, 1);;
+            font-size: 72px;
             font-weight: bold;
+            margin-bottom: 10px;
         }
 
         /* Form styles */
         .session-form {
-            background-color: #fff;
+            background-color: rgba(35, 25, 66, 1);
+            border: 3px solid rgba(0, 200, 162, 1);
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
         }
 
         .session-form label {
             display: block;
-            margin-bottom: 5px;
+            color: rgba(0, 200, 162, 1);
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
@@ -95,7 +107,14 @@
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
+            background-color: rgba(35, 25, 66, 1);
+            color: rgba(0, 200, 162, 1);
+            border-color: rgba(0, 200, 162, 1);
             box-sizing: border-box;
+        }
+
+        .session-form input[type="text"]:focus {
+            outline: 2px solid rgba(0, 200, 162, 1);
         }
 
         .session-form button {
@@ -117,21 +136,100 @@
             margin: 10px 0;
             border-radius: 5px;
         }
+
+        .loggedInAs {
+            font-family: "Victor Mono";
+            color: white;
+            font-style: italic;
+        }
+
+        .mapDiv {
+            border: 3px solid rgba(0, 200, 162, 1);
+            padding: 2px;
+        }
+
+        .timerStartBtn {
+            color: white;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 5px;
+            font-family: 'Victor Mono';
+            font-size: 16px;
+            width: 120px;
+        }
+
+        .timerStopBtn {
+            color: white;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 3px;
+            font-family: 'Victor Mono';
+            font-size: 16px;
+            width: 120px;
+        }
+
+        .finishBtn {
+            color: white;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 3px;
+            font-family: 'Victor Mono';
+            font-size: 16px;
+            width: 200px;
+        }
+
+        .dashboardBtn {
+            color: white;
+            text-decoration: none;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 3px;
+            font-family: 'Victor Mono';
+            font-size: 18px;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .logoutBtn {
+            color: white;
+            text-decoration: none;
+            background-color: rgba(0, 200, 162, 1);
+            border: none;
+            border-color: rgba(0, 200, 162, 1);
+            border-radius: 3px;
+            font-family: 'Victor Mono';
+            font-size: 18px;
+            padding: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .userMessage {
+            color: white;
+            font-family: "Victor Mono";
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
-    <h1>Study Timer</h1>
+    <h1>//study timer</h1>
     <div class="timer-container">
         <!-- Left Column -->
         <div class="timer-left">
             <!-- Timer -->
             <div id="timer">
-                <h2>Time Spent:</h2>
+                <!--<h2>time spent:</h2>-->
                 <div class="stopwatch">
                     <span id="time">00:00:00</span>
                 </div>
-                <button id="start-btn" class="nb-button blue">Start</button>
-                <button id="stop-btn" class="nb-button blue" disabled>Stop</button>
+                <button id="start-btn" class="timerStartBtn">start</button>
+                <button id="stop-btn" class="timerStopBtn" disabled>stop</button>
             </div>
 
             <!-- Form -->
@@ -143,12 +241,13 @@
                     <input type="hidden" name="latitude" id="latitude" value="0">
                     <input type="hidden" name="longitude" id="longitude" value="0">
 
-                    <label for="session-title">Session Title:</label>
+                    <label for="session-title">session title:</label>
                     <input type="text" id="session-title" name="session_title" required>
-                    <button type="submit" id="finish-btn" class="nb-button blue">Finish Session</button>
+                    <button type="submit" id="finish-btn" class="finishBtn">finish session</button>
                 </form>
-                <p>You are logged in as {{ request.user.username }}</p>
             </div>
+
+            <p class="userMessage">*note: only sessions over 10 minutes count towards your study streak</p>
 
             <!-- Error message (if any) -->
             {% if error_message %}
@@ -159,14 +258,15 @@
 
             <!-- Dashboard Buttons -->
             <div class="dashboard-buttons">
-                <a href="{% url 'dashboard' %}" class="nb-button blue">Back to Dashboard</a>
-                <a href="{% url 'logout' %}" class="nb-button blue">Logout</a>
+                <a href="{% url 'dashboard' %}" class="dashboardBtn">back to dashboard</a>
+                <a href="{% url 'logout' %}" class="logoutBtn">logout</a>
+                <!--<p class="loggedInAs">you are logged in as {{ request.user.username }}</p>-->
             </div>
         </div>
 
         <!-- Right Column (Map) -->
         <div class="timer-right">
-            <div id="map"></div>
+            <div class="mapDiv" id="map"></div>
         </div>
     </div>
 
