@@ -126,6 +126,9 @@ def study_time(request):
     return render(request, "timer.html", {"stopwatch": stopwatch, "all_stopwatches": user_stopwatches})
 
 
+'''
+Removed - uncomment if things break!
+
 @login_required
 def start_study_session(request):
     if request.method == 'POST':
@@ -134,7 +137,7 @@ def start_study_session(request):
         stopwatch.save()
         return redirect('dashboard')
     return redirect('study_time')
-
+'''
 
 @login_required
 def study_statistics(request):
