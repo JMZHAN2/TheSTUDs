@@ -104,7 +104,7 @@ def dashboard(request):
     # Calculate average session time in seconds
     average_time = total_time / all_study_sessions.count() if all_study_sessions.exists() else 0
 
-    # Calculate the study streak
+    # Calculate the study streak, found in models.py
     streak = Stopwatch.calculate_study_streak(request.user)
 
     context = {
