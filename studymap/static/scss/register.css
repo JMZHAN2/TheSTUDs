@@ -3,6 +3,9 @@
   font-family: 'Victor Mono';
   src: url("./VictorMonoAll/TTF/VictorMono-Regular.ttf"); }
 
+ul {
+  list-style-type: none; }
+
 body {
   background-color: #231942; }
 
@@ -41,6 +44,33 @@ form div {
 .logoImg {
   margin-left: -5%;
   margin-top: 2%; }
+
+/*
+.messages {
+    font-family: 'Victor Mono' !important;
+    color: white !important;
+    margin-left: 20% !important;
+    margin-right: auto !important;
+}
+*/
+.messages {
+  font-family: 'Victor Mono', monospace !important;
+  color: white !important;
+  margin: 0 auto !important;
+  text-align: center;
+  width: fit-content;
+  /* Optional, to shrink-wrap the content */ }
+
+.form-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px; }
+  .form-error .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+    .form-error .errorlist li.error {
+      margin-bottom: 5px; }
 
 .loginTitle {
   color: 00C8A2;

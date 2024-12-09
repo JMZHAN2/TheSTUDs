@@ -42,14 +42,27 @@
             <button class="nb-button blue" type="submit">Register</button>
         </div>
     </form>
-
-    <!-- Sends error messages -->
+    
+    <!-- Sends validation error messages -->
     {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                <div class="messages"/>
+                {{ message }}
+            </li>
+            {% endfor %}
         </ul>
     {% endif %}
+    
+    <!-- Sends password authentication errors -->
+    {% if form.errors %}
+        {% for field in form %}
+            <div class="error-message">
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
 </body>
 </html>
