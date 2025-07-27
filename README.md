@@ -8,10 +8,13 @@ Key Features:
 - Weekly goal setting
 - Map of your most-studied spots
 
-  
+
+<img width="613" height="517" alt="Screenshot 2025-07-27 at 3 21 38 PM" src="https://github.com/user-attachments/assets/572fb34b-cbde-4f32-af1e-ed1b5874ea9e" />
+
 <img width="1409" height="513" alt="Screenshot 2025-07-27 at 3 05 53 PM" src="https://github.com/user-attachments/assets/1cfd5219-9724-4d77-8590-b69722b9c40d" />
 
-<img width="1057" height="670" alt="Screenshot 2025-07-27 at 3 07 26 PM" src="https://github.com/user-attachments/assets/3ef9d88f-975c-4949-b892-8eeeba5f9893" />
+<img width="1429" height="681" alt="Screenshot 2025-07-27 at 3 22 08 PM" src="https://github.com/user-attachments/assets/f3dd6dcc-afcd-4a4b-b296-88fac391b3bc" />
+
 
 
 
