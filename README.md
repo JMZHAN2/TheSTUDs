@@ -8,6 +8,13 @@ Key Features:
 - Weekly goal setting
 - Map of your most-studied spots
 
+  
+<img width="1409" height="513" alt="Screenshot 2025-07-27 at 3 05 53 PM" src="https://github.com/user-attachments/assets/1cfd5219-9724-4d77-8590-b69722b9c40d" />
+
+<img width="1057" height="670" alt="Screenshot 2025-07-27 at 3 07 26 PM" src="https://github.com/user-attachments/assets/3ef9d88f-975c-4949-b892-8eeeba5f9893" />
+
+
+
 How to Run Site
 
 - Make sure you have python and Git installed. After you download the code, make sure you have all the necessary libraries installed by running the following commands in your terminal:
